@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RehabGuide — 근거기반 재활 임상 가이드</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b0d0c;--s1:#131513;--s2:#191c19;--s3:#1f221f;
+  --b1:rgba(255,255,255,0.06);--b2:rgba(255,255,255,0.12);
+  --g:#4ade80;--gd:rgba(74,222,128,0.13);--g2:rgba(74,222,128,0.06);
+  --o:#fb923c;--od:rgba(251,146,60,0.13);
+  --r:#f87171;--rd:rgba(248,113,113,0.13);
+  --bl:#60a5fa;--bld:rgba(96,165,250,0.13);
+  --y:#fbbf24;--yd:rgba(251,191,36,0.11);
+  --pu:#a78bfa;--pud:rgba(167,139,250,0.13);
+  --t1:#e6e8e6;--t2:#9ba09b;--t3:#5f645f;
+  --fn:'Noto Sans KR',sans-serif;--mo:'DM Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:15px;scroll-behavior:smooth;}
+body{font-family:var(--fn);background:var(--bg);color:var(--t1);min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.6;}
+.shell{display:flex;min-height:100vh;}
+.sidebar{width:236px;flex-shrink:0;background:var(--s1);border-right:1px solid var(--b1);position:fixed;top:0;left:0;height:100vh;overflow-y:auto;z-index:200;display:flex;flex-direction:column;}
+.main{margin-left:236px;flex:1;}
+.page{display:none;padding:28px 36px;max-width:980px;animation:fi .2s ease;}
+.page.active{display:block;}
+@keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.sb-logo{padding:16px 16px 13px;border-bottom:1px solid var(--b1);}
+.sb-logo .mk{font-family:var(--mo);font-size:10px;color:var(--g);letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px;}
+.sb-logo h1{font-size:15px;font-weight:700;color:var(--t1);}
+.sb-logo p{font-size:11px;color:var(--t3);margin-top:1px;}
+.sb-sec{padding:8px 10px 2px;}
+.sb-lbl{font-size:11px;font-weight:500;color:var(--t3);text-transform:uppercase;letter-spacing:.08em;padding:0 6px;margin-bottom:2px;}
+.ni{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:8px;cursor:pointer;border:1px solid transparent;margin-bottom:1px;transition:all .15s;}
+.ni:hover{background:var(--s3);}
+.ni.active{background:var(--gd);border-color:rgba(74,222,128,.18);}
+.ni-ic{width:32px;height:20px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;background:var(--s3);}
+.ni.active .ni-ic{background:var(--g2);}
+.ni-lbl{font-size:13px;color:var(--t2);}
+.ni.active .ni-lbl{color:var(--g);font-weight:500;}
+.sb-foot{margin-top:auto;padding:10px 14px;border-top:1px solid var(--b1);}
+.sb-ver{font-family:var(--mo);font-size:10px;color:var(--t3);}
+.ph{margin-bottom:22px;padding-bottom:16px;border-bottom:1px solid var(--b1);}
+.ph .bc{font-family:var(--mo);font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px;}
+.ph h2{font-size:24px;font-weight:700;color:var(--t1);letter-spacing:-.4px;}
+.ph p{font-size:14px;color:var(--t2);margin-top:5px;line-height:1.5;}
+.st{font-family:var(--mo);font-size:12px;color:var(--g);text-transform:uppercase;letter-spacing:.1em;margin:18px 0 10px;display:flex;align-items:center;gap:8px;}
+.st::after{content:'';flex:1;height:1px;background:var(--b1);}
+.tag{display:inline-flex;align-items:center;font-size:11px;font-weight:500;padding:2px 8px;border-radius:20px;letter-spacing:.03em;text-transform:uppercase;}
+.tg{background:var(--gd);color:var(--g);border:1px solid rgba(74,222,128,.2);}
+.to{background:var(--od);color:var(--o);border:1px solid rgba(251,146,60,.2);}
+.tr{background:var(--rd);color:var(--r);border:1px solid rgba(248,113,113,.2);}
+.tb{background:var(--bld);color:var(--bl);border:1px solid rgba(96,165,250,.2);}
+.al{border-radius:8px;padding:12px 14px;margin-bottom:12px;display:flex;gap:10px;align-items:flex-start;font-size:13px;line-height:1.6;}
+.al strong{display:block;font-size:12px;margin-bottom:2px;}
+.al-r{background:var(--rd);border:1px solid rgba(248,113,113,.2);color:var(--r);}
+.al-o{background:var(--od);border:1px solid rgba(251,146,60,.2);color:var(--o);}
+.al-g{background:var(--gd);border:1px solid rgba(74,222,128,.2);color:var(--g);}
+.al-b{background:var(--bld);border:1px solid rgba(96,165,250,.2);color:var(--bl);}
+.tbl-wrap{background:var(--s1);border:1px solid var(--b1);border-radius:12px;overflow-x:auto;margin-bottom:14px;}
+.tbl{width:100%;border-collapse:collapse;font-size:13px;}
+.tbl th{font-family:var(--mo);font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--t3);font-weight:400;text-align:left;padding:7px 10px;border-bottom:1px solid var(--b1);white-space:nowrap;}
+.tbl td{padding:10px 12px;border-bottom:1px solid var(--b1);color:var(--t2);vertical-align:top;line-height:1.6;}
+.tbl td:first-child{color:var(--t1);font-weight:500;}
+.tbl tr:last-child td{border-bottom:none;}
+.tbl tr:hover td{background:var(--s2);}
+.acc{border:1px solid var(--b1);border-radius:12px;overflow:hidden;margin-bottom:12px;}
+.acc-item{border-bottom:1px solid var(--b1);}
+.acc-item:last-child{border-bottom:none;}
+.acc-h{display:flex;align-items:center;justify-content:space-between;padding:12px 15px;cursor:pointer;transition:background .15s;gap:10px;}
+.acc-h:hover,.acc-h.open{background:var(--s2);}
+.acc-l{display:flex;align-items:center;gap:10px;flex:1;}
+.acc-n{font-family:var(--mo);font-size:11px;color:var(--g);min-width:20px;}
+.acc-title{font-size:15px;font-weight:500;color:var(--t1);}
+.acc-sub{font-size:12px;color:var(--t3);margin-top:1px;}
+.acc-arr{font-size:11px;color:var(--t3);transition:transform .2s;flex-shrink:0;}
+.acc-h.open .acc-arr{transform:rotate(180deg);}
+.acc-b{display:none;padding:0 15px 15px;background:var(--s2);}
+.acc-b.open{display:block;}
+.ec{background:var(--s1);border:1px solid var(--b1);border-radius:8px;overflow:hidden;margin-bottom:8px;transition:border-color .2s;}
+.ec:hover{border-color:var(--b2);}
+.ec-h{display:flex;align-items:center;justify-content:space-between;padding:11px 13px;cursor:pointer;gap:10px;}
+.ec-l{display:flex;align-items:center;gap:10px;flex:1;}
+.ec-ic{width:30px;height:30px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;background:var(--s3);}
+.ec-name{font-size:15px;font-weight:500;color:var(--t1);}
+.ec-meta{font-size:13px;color:var(--t3);margin-top:1px;}
+.ec-arr{font-size:11px;color:var(--t3);transition:transform .2s;flex-shrink:0;}
+.ec.open .ec-arr{transform:rotate(180deg);}
+.ec-b{display:none;padding:0 13px 13px;border-top:1px solid var(--b1);}
+.ec.open .ec-b{display:block;}
+.ec-chips{display:flex;flex-wrap:wrap;gap:5px;margin:9px 0 7px;}
+.ec-chip{font-size:12px;padding:2px 9px;border-radius:20px;background:var(--s3);color:var(--t2);border:1px solid var(--b1);}
+.ec-point{font-size:13px;color:var(--t2);line-height:1.7;padding:8px 11px;background:var(--s1);border-radius:4px;border-left:2px solid var(--g);margin-bottom:7px;}
+.ec-desc{font-size:13px;color:var(--t2);line-height:1.7;margin-bottom:7px;}
+.ec-ref{font-size:12px;color:var(--g);padding:6px 10px;background:var(--g2);border-radius:4px;margin-top:6px;}
+.ec-ref::before{content:' 근거: ';}
+.ec-warn{font-size:12px;color:var(--o);padding:6px 10px;background:var(--od);border-radius:4px;margin-top:6px;}
+.ec-warn::before{content:' ';}
+.ec-danger{font-size:12px;color:var(--r);padding:6px 10px;background:var(--rd);border-radius:4px;margin-top:6px;}
+.ec-danger::before{content:' 주의: ';}
+.ptabs{display:flex;gap:5px;margin-bottom:13px;flex-wrap:wrap;}
+.ptab{font-size:13px;padding:5px 13px;border-radius:20px;border:1px solid var(--b1);cursor:pointer;color:var(--t2);background:var(--s1);transition:all .15s;font-family:var(--fn);}
+.ptab:hover{border-color:var(--b2);}
+.ptab.active{background:var(--gd);border-color:rgba(74,222,128,.3);color:var(--g);}
+.pp{display:none;}
+.pp.active{display:block;animation:fi .2s ease;}
+.chain{display:flex;align-items:center;flex-wrap:wrap;gap:5px;padding:12px;background:var(--s2);border-radius:8px;margin-bottom:13px;border:1px solid var(--b1);}
+.cn{font-size:13px;font-weight:500;padding:4px 11px;border-radius:20px;white-space:nowrap;}
+.ca{color:var(--t3);font-size:13px;}
+.bm-wrap{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:18px;}
+.bm-view{flex:1;min-width:180px;max-width:220px;text-align:center;}
+.bm-lbl{font-family:var(--mo);font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;}
+.bm-svg{width:100%;}
+.hs{cursor:pointer;transition:opacity .2s;}
+.hs:hover{opacity:.7;}
+.pg{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:9px;margin-bottom:18px;}
+.pc{background:var(--s1);border:1px solid var(--b1);border-radius:12px;padding:13px;cursor:pointer;transition:all .15s;text-align:center;}
+.pc:hover{border-color:var(--b2);background:var(--s2);}
+.pc .pi{font-size:24px;margin-bottom:5px;}
+.pc .pn{font-size:14px;font-weight:500;color:var(--t1);}
+.pc .ps{font-size:12px;color:var(--t3);margin-top:2px;}
+.sw{display:flex;gap:8px;margin-bottom:12px;}
+.si{flex:1;background:var(--s2);border:1px solid var(--b1);border-radius:8px;padding:10px 14px;font-size:14px;color:var(--t1);font-family:var(--fn);outline:none;transition:border-color .15s;}
+.si:focus{border-color:rgba(74,222,128,.4);}
+.si::placeholder{color:var(--t3);}
+.sb2{background:var(--gd);border:1px solid rgba(74,222,128,.3);border-radius:8px;padding:9px 16px;font-size:12px;font-weight:500;color:var(--g);cursor:pointer;font-family:var(--fn);transition:all .15s;white-space:nowrap;}
+.sb2:hover{background:rgba(74,222,128,.2);}
+.sl{display:flex;gap:7px;flex-wrap:wrap;}
+.slk{font-size:13px;padding:4px 11px;border-radius:20px;border:1px solid var(--b1);color:var(--t2);background:var(--s1);cursor:pointer;text-decoration:none;transition:all .15s;}
+.slk:hover{border-color:var(--b2);color:var(--t1);}
+.mh{display:none;background:var(--s1);border-bottom:1px solid var(--b1);padding:11px 14px;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:90;}
+.mb{background:none;border:none;color:var(--t1);font-size:18px;cursor:pointer;padding:4px;}
+.ml{font-size:14px;font-weight:700;color:var(--t1);}
+
+.print-btn { position: fixed; bottom: 20px; right: 20px; background: #4ade80; color: #0b0d0c; border: none; border-radius: 8px; padding: 10px 18px; font-size: 13px; font-weight: 600; cursor: pointer; z-index: 300; font-family: var(--fn); }
+.print-btn:hover { background: #22c55e; }
+@media print { .print-btn { display: none !important; } }
+.ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:99;}
+.ov.show{display:block;}
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%);transition:transform .25s ease;}
+  .sidebar.open{transform:translateX(0);}
+  .main{margin-left:0;}
+  .mh{display:flex;}
+  .page{padding:13px;}
+  .pg{grid-template-columns:repeat(2,1fr);}
+}
+hr.dv{border:none;border-top:1px solid var(--b1);margin:16px 0;}
+</style>
+
+<style id="print-css">
+@media print {
+  .sidebar, .mh, .ov { display: none !important; }
+  .main { margin-left: 0 !important; }
+  .page { display: block !important; padding: 10mm !important; max-width: 100% !important; }
+  body { background: white !important; color: black !important; font-size: 11pt !important; }
+  .ph h2 { font-size: 16pt !important; color: black !important; }
+  .ph p, .ec-name, .ec-meta, .ec-point, .ec-desc, .tbl td, .tbl th { color: black !important; }
+  .al, .ec, .acc, .tbl-wrap { border: 1px solid #ccc !important; background: white !important; }
+  .ec-b { display: block !important; }
+  .ec-ref, .ec-warn, .ec-danger { background: #f5f5f5 !important; color: black !important; }
+  .tag { border: 1px solid #999 !important; color: black !important; background: #eee !important; }
+  .ptabs, .pp { display: none !important; }
+  .pp.active { display: block !important; }
+  .chain { background: #f5f5f5 !important; }
+  .cn { background: #eee !important; color: black !important; }
+  .st::after { background: #ccc !important; }
+  .ec-arr { display: none !important; }
+  @page { margin: 15mm; size: A4; }
+}
+</style>
+</head>
+<body>
+<div class="ov" id="ov" onclick="closeSB()"></div>
+<div class="shell">
+
+<nav class="sidebar" id="sb">
+  <div class="sb-logo">
+    <div class="mk">Evidence-Based · Clinical</div>
+    <h1>RehabGuide</h1>
+    <p>근거기반 재활 임상 가이드 v3.0</p>
+  </div>
+  <div class="sb-sec">
+    <div class="sb-lbl">홈</div>
+    <div class="ni active" onclick="go('home')"><div class="ni-ic">HOME</div><div class="ni-lbl">바디맵 홈</div></div>
+    <div class="ni" onclick="go('chain')"><div class="ni-ic">LINK</div><div class="ni-lbl">체형→통증 연쇄</div></div>
+    <div class="ni" onclick="go('pubmed')"><div class="ni-ic">PUB</div><div class="ni-lbl">논문 검색</div></div>
+  </div>
+  <div class="sb-sec">
+    <div class="sb-lbl">체형 교정</div>
+    <div class="ni" onclick="go('fhp')"><div class="ni-ic">FHP</div><div class="ni-lbl">두부전방·라운드숄더</div></div>
+    <div class="ni" onclick="go('thoracic')"><div class="ni-ic">THO</div><div class="ni-lbl">흉추후만</div></div>
+    <div class="ni" onclick="go('scoliosis')"><div class="ni-ic">SCO</div><div class="ni-lbl">척추측만 (Schroth)</div></div>
+    <div class="ni" onclick="go('apt')"><div class="ni-ic">APT</div><div class="ni-lbl">골반 전방경사</div></div>
+    <div class="ni" onclick="go('ppt')"><div class="ni-ic">PPT</div><div class="ni-lbl">골반 후방경사</div></div>
+    <div class="ni" onclick="go('lpelvic')"><div class="ni-ic">LAT</div><div class="ni-lbl">골반 측방경사</div></div>
+    <div class="ni" onclick="go('valgus')"><div class="ni-ic">VAL</div><div class="ni-lbl">외반슬 (원인감별)</div></div>
+    <div class="ni" onclick="go('varus')"><div class="ni-ic">VAR</div><div class="ni-lbl">내반슬</div></div>
+    <div class="ni" onclick="go('recurvatum')"><div class="ni-ic">BAK</div><div class="ni-lbl">백니</div></div>
+    <div class="ni" onclick="go('hallux')"><div class="ni-ic">HAL</div><div class="ni-lbl">무지외반</div></div>
+  </div>
+  <div class="sb-sec">
+    <div class="sb-lbl">척추 재활</div>
+    <div class="ni" onclick="go('hivd')"><div class="ni-ic">DSC</div><div class="ni-lbl">허리 디스크 (HIVD)</div></div>
+    <div class="ni" onclick="go('stenosis')"><div class="ni-ic">STE</div><div class="ni-lbl">요추 협착증</div></div>
+    <div class="ni" onclick="go('cdisc')"><div class="ni-ic">CDK</div><div class="ni-lbl">경추 디스크·신경근병증</div></div>
+  </div>
+  <div class="sb-sec">
+    <div class="sb-lbl">어깨 재활</div>
+    <div class="ni" onclick="go('impingement')"><div class="ni-ic">SIS</div><div class="ni-lbl">어깨 충돌증후군</div></div>
+    <div class="ni" onclick="go('rctear')"><div class="ni-ic">RCT</div><div class="ni-lbl">회전근개 파열</div></div>
+    <div class="ni" onclick="go('frozen')"><div class="ni-ic">FRZ</div><div class="ni-lbl">오십견</div></div>
+  </div>
+  <div class="sb-sec">
+    <div class="sb-lbl">신경·손목</div>
+    <div class="ni" onclick="go('cts')"><div class="ni-ic">CTS</div><div class="ni-lbl">수근관 증후군 (CTS)</div></div>
+    <div class="ni" onclick="go('tos')"><div class="ni-ic">TOS</div><div class="ni-lbl">흉곽출구증후군 (TOS)</div></div>
+  </div>
+  <div class="sb-sec">
+    <div class="sb-lbl">무릎 재활</div>
+    <div class="ni" onclick="go('pfps')"><div class="ni-ic">CDK</div><div class="ni-lbl">앞무릎 (PFPS)</div></div>
+    <div class="ni" onclick="go('medknee')"><div class="ni-ic">MED</div><div class="ni-lbl">내측 무릎</div></div>
+    <div class="ni" onclick="go('latknee')"><div class="ni-ic">LAT</div><div class="ni-lbl">외측 무릎 (ITBS)</div></div>
+    <div class="ni" onclick="go('postknee')"><div class="ni-ic">PCL</div><div class="ni-lbl">후방 무릎 (PCL)</div></div>
+  </div>
+  
+  <div class="sb-sec">
+    <div class="sb-lbl">발목·고관절·팔꿈치</div>
+    <div class="ni" onclick="go('ankle')"><div class="ni-ic">ANK</div><div class="ni-lbl">발목 재활</div></div>
+    <div class="ni" onclick="go('hip')"><div class="ni-ic">HIP</div><div class="ni-lbl">고관절 재활 (FAI)</div></div>
+    <div class="ni" onclick="go('elbow')"><div class="ni-ic">ELB</div><div class="ni-lbl">팔꿈치 (테니스·골프엘보)</div></div>
+  </div>
+  <div class="sb-sec">
+    <div class="sb-lbl">평가 & 기준</div>
+    <div class="ni" onclick="go('initial-eval')"><div class="ni-ic" style="background:var(--gd);color:var(--g);font-weight:700;">NEW</div><div class="ni-lbl" style="color:var(--g);font-weight:600;">초기 체형 평가</div></div>
+    <div class="ni" onclick="go('assessment')"><div class="ni-ic">ASS</div><div class="ni-lbl">평가 프로토콜 & 금기</div></div>
+  </div>
+  <div class="sb-foot"><div class="sb-ver">v3.0 · 논문 근거 기반 임상 가이드</div></div>
+</nav>
+
+<main class="main">
+<div class="mh">
+  <button class="mb" onclick="openSB()"></button>
+  <span class="ml">RehabGuide</span>
+  <span style="width:28px"></span>
+</div>
+
+<!-- HOME -->
+<div class="page active" id="page-home">
+  <div style="margin-bottom:28px;padding-bottom:24px;border-bottom:1px solid var(--b1);">
+    <div style="font-family:var(--mo);font-size:11px;color:var(--g);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;">Evidence-Based Clinical Guide</div>
+    <h2 style="font-size:28px;font-weight:700;color:var(--t1);letter-spacing:-.5px;line-height:1.3;margin-bottom:10px;">RehabGuide</h2>
+    <p style="font-size:14px;color:var(--t2);line-height:1.8;max-width:540px;">체형 평가 → 원인 감별 → 단계별 재활. 모든 운동은 RCT·체계적 문헌고찰 기반입니다.<br>처음 오는 회원은 <span style="color:var(--g);cursor:pointer;font-weight:600;text-decoration:underline;" onclick="go('initial-eval')">초기 체형 평가</span>부터 시작하세요.</p>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:32px;">
+    <div onclick="go('initial-eval')" style="background:var(--gd);border:1px solid rgba(74,222,128,.3);border-radius:12px;padding:20px 16px;cursor:pointer;transition:opacity .15s;" onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'">
+      <div style="font-family:var(--mo);font-size:10px;color:var(--g);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">STEP 1</div>
+      <div style="font-size:16px;font-weight:700;color:var(--g);margin-bottom:6px;">초기 체형 평가</div>
+      <div style="font-size:13px;color:var(--t2);line-height:1.6;">신규 회원<br>체형 스크리닝 프로토콜</div>
+    </div>
+    <div onclick="go('assessment')" style="background:var(--s2);border:1px solid var(--b2);border-radius:12px;padding:20px 16px;cursor:pointer;transition:opacity .15s;" onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'">
+      <div style="font-family:var(--mo);font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">STEP 2</div>
+      <div style="font-size:16px;font-weight:700;color:var(--t1);margin-bottom:6px;">임상 평가 테스트</div>
+      <div style="font-size:13px;color:var(--t2);line-height:1.6;">부위별 테스트<br>Red Flag 확인</div>
+    </div>
+    <div onclick="go('chain')" style="background:var(--s2);border:1px solid var(--b2);border-radius:12px;padding:20px 16px;cursor:pointer;transition:opacity .15s;" onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'">
+      <div style="font-family:var(--mo);font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">STEP 3</div>
+      <div style="font-size:16px;font-weight:700;color:var(--t1);margin-bottom:6px;">체형→통증 연쇄</div>
+      <div style="font-size:13px;color:var(--t2);line-height:1.6;">원인 찾기<br>Kinetic Chain Map</div>
+    </div>
+  </div>
+
+  <div class="bm-wrap">
+    <div class="bm-view"><div class="bm-lbl">정면</div>
+      <svg class="bm-svg" viewBox="0 0 160 340" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="80" cy="28" rx="22" ry="26" fill="#1e221e" stroke="#3a3e3a" stroke-width="1"/>
+        <rect x="62" y="51" width="36" height="8" rx="4" fill="#1e221e" stroke="#3a3e3a" stroke-width=".5"/>
+        <path d="M50 59 Q35 71 32 121 Q30 151 35 181 L55 181 L58 141 L80 146 L102 141 L105 181 L125 181 Q130 151 128 121 Q125 71 110 59 Z" fill="#1e221e" stroke="#3a3e3a" stroke-width=".8"/>
+        <path d="M50 66 Q28 81 22 141 L34 143 Q38 91 54 76 Z" fill="#1e221e" stroke="#3a3e3a" stroke-width=".8"/>
+        <path d="M110 66 Q132 81 138 141 L126 143 Q122 91 106 76 Z" fill="#1e221e" stroke="#3a3e3a" stroke-width=".8"/>
+        <ellipse cx="27" cy="149" rx="8" ry="12" fill="#1e221e" stroke="#3a3e3a" stroke-width=".8"/>
+        <ellipse cx="133" cy="149" rx="8" ry="12" fill="#1e221e" stroke="#3a3e3a" stroke-width=".8"/>
+        <path d="M55 181 Q48 221 46 271 L68 271 Q68 226 72 186 Z" fill="#1e221e" stroke="#3a3e3a" stroke-width=".8"/>
+        <path d="M105 181 Q112 221 114 271 L92 271 Q92 226 88 186 Z" fill="#1e221e" stroke="#3a3e3a" stroke-width=".8"/>
+        <path d="M46 271 Q44 306 46 321 L66 321 Q66 306 68 271 Z" fill="#1e221e" stroke="#3a3e3a" stroke-width=".8"/>
+        <path d="M114 271 Q116 306 114 321 L94 321 Q94 306 92 271 Z" fill="#1e221e" stroke="#3a3e3a" stroke-width=".8"/>
+        <ellipse cx="56" cy="327" rx="12" ry="7" fill="#1e221e" stroke="#3a3e3a" stroke-width=".8"/>
+        <ellipse cx="104" cy="327" rx="12" ry="7" fill="#1e221e" stroke="#3a3e3a" stroke-width=".8"/>
+        <g class="hs" onclick="go('fhp')"><ellipse cx="80" cy="28" rx="22" ry="26" fill="rgba(96,165,250,.18)" stroke="#60a5fa" stroke-width="1.5" stroke-dasharray="3,2"/><text x="80" y="32" text-anchor="middle" fill="#60a5fa" font-size="7" font-family="sans-serif">두부전방</text></g>
+        <g class="hs" onclick="go('impingement')"><ellipse cx="40" cy="73" rx="13" ry="10" fill="rgba(251,146,60,.18)" stroke="#fb923c" stroke-width="1.5" stroke-dasharray="3,2"/><ellipse cx="120" cy="73" rx="13" ry="10" fill="rgba(251,146,60,.18)" stroke="#fb923c" stroke-width="1.5" stroke-dasharray="3,2"/><text x="40" y="77" text-anchor="middle" fill="#fb923c" font-size="6.5" font-family="sans-serif">어깨</text><text x="120" y="77" text-anchor="middle" fill="#fb923c" font-size="6.5" font-family="sans-serif">어깨</text></g>
+        <g class="hs" onclick="go('hivd')"><rect x="70" y="66" width="20" height="62" rx="4" fill="rgba(167,139,250,.18)" stroke="#a78bfa" stroke-width="1.5" stroke-dasharray="3,2"/><text x="80" y="98" text-anchor="middle" fill="#a78bfa" font-size="7" font-family="sans-serif">척추</text></g>
+        <g class="hs" onclick="go('apt')"><rect x="56" y="149" width="48" height="30" rx="6" fill="rgba(251,191,36,.18)" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="3,2"/><text x="80" y="164" text-anchor="middle" fill="#fbbf24" font-size="7" font-family="sans-serif">골반</text></g>
+        <g class="hs" onclick="go('valgus')"><ellipse cx="56" cy="249" rx="12" ry="15" fill="rgba(74,222,128,.18)" stroke="#4ade80" stroke-width="1.5" stroke-dasharray="3,2"/><ellipse cx="104" cy="249" rx="12" ry="15" fill="rgba(74,222,128,.18)" stroke="#4ade80" stroke-width="1.5" stroke-dasharray="3,2"/><text x="56" y="253" text-anchor="middle" fill="#4ade80" font-size="6.5" font-family="sans-serif">무릎</text><text x="104" y="253" text-anchor="middle" fill="#4ade80" font-size="6.5" font-family="sans-serif">무릎</text></g>
+        <g class="hs" onclick="go('hallux')"><ellipse cx="56" cy="327" rx="12" ry="7" fill="rgba(248,113,113,.2)" stroke="#f87171" stroke-width="1.5" stroke-dasharray="3,2"/><ellipse cx="104" cy="327" rx="12" ry="7" fill="rgba(248,113,113,.2)" stroke="#f87171" stroke-width="1.5" stroke-dasharray="3,2"/><text x="80" y="330" text-anchor="middle" fill="#f87171" font-size="6" font-family="sans-serif">발</text></g>
+      </svg>
+    </div>
+    <div class="bm-view"><div class="bm-lbl">측면</div>
+      <svg class="bm-svg" viewBox="0 0 120 340" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="62" cy="28" rx="20" ry="24" fill="#1e221e" stroke="#3a3e3a" stroke-width="1"/>
+        <rect x="55" y="50" width="14" height="10" rx="3" fill="#1e221e" stroke="#3a3e3a" stroke-width=".5"/>
+        <path d="M40 60 Q38 100 36 130 Q34 160 38 180 L75 180 Q72 160 70 130 Q68 100 72 60 Z" fill="#1e221e" stroke="#3a3e3a" stroke-width=".8"/>
+        <path d="M72 68 Q88 90 90 140 L80 142 Q78 95 66 72 Z" fill="#1e221e" stroke="#3a3e3a" stroke-width=".8"/>
+        <ellipse cx="84" cy="148" rx="7" ry="11" fill="#1e221e" stroke="#3a3e3a" stroke-width=".8"/>
+        <path d="M38 180 Q36 220 36 268 L55 268 Q55 222 55 182 Z" fill="#1e221e" stroke="#3a3e3a" stroke-width=".8"/>
+        <path d="M55 182 Q60 222 60 268 L75 268 Q72 222 75 182 Z" fill="#1e221e" stroke="#3a3e3a" stroke-width=".8"/>
+        <path d="M36 268 Q34 305 36 320 L54 320 Q54 305 55 268 Z" fill="#1e221e" stroke="#3a3e3a" stroke-width=".8"/>
+        <path d="M60 268 Q60 305 60 320 L75 320 Q76 305 75 268 Z" fill="#1e221e" stroke="#3a3e3a" stroke-width=".8"/>
+        <ellipse cx="47" cy="326" rx="14" ry="7" fill="#1e221e" stroke="#3a3e3a" stroke-width=".8"/>
+        <g class="hs" onclick="go('cdisc')"><ellipse cx="62" cy="28" rx="20" ry="24" fill="rgba(96,165,250,.18)" stroke="#60a5fa" stroke-width="1.5" stroke-dasharray="3,2"/><text x="62" y="32" text-anchor="middle" fill="#60a5fa" font-size="7" font-family="sans-serif">경추</text></g>
+        <g class="hs" onclick="go('thoracic')"><rect x="30" y="62" width="20" height="68" rx="4" fill="rgba(167,139,250,.2)" stroke="#a78bfa" stroke-width="1.5" stroke-dasharray="3,2"/><text x="40" y="97" text-anchor="middle" fill="#a78bfa" font-size="7" font-family="sans-serif">흉추</text></g>
+        <g class="hs" onclick="go('hivd')"><rect x="34" y="133" width="22" height="44" rx="4" fill="rgba(251,146,60,.18)" stroke="#fb923c" stroke-width="1.5" stroke-dasharray="3,2"/><text x="45" y="156" text-anchor="middle" fill="#fb923c" font-size="6.5" font-family="sans-serif">요추</text></g>
+        <g class="hs" onclick="go('recurvatum')"><ellipse cx="46" cy="268" rx="12" ry="15" fill="rgba(248,113,113,.18)" stroke="#f87171" stroke-width="1.5" stroke-dasharray="3,2"/><text x="46" y="272" text-anchor="middle" fill="#f87171" font-size="6.5" font-family="sans-serif">백니</text></g>
+      </svg>
+    </div>
+    <div class="bm-view"><div class="bm-lbl">후면</div>
+      <svg class="bm-svg" viewBox="0 0 160 340" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="80" cy="28" rx="22" ry="26" fill="#1e221e" stroke="#3a3e3a" stroke-width="1"/>
+        <rect x="62" y="51" width="36" height="8" rx="4" fill="#1e221e" stroke="#3a3e3a" stroke-width=".5"/>
+        <path d="M50 59 Q35 71 32 121 Q30 151 35 181 L55 181 L58 141 L80 146 L102 141 L105 181 L125 181 Q130 151 128 121 Q125 71 110 59 Z" fill="#1e221e" stroke="#3a3e3a" stroke-width=".8"/>
+        <line x1="80" y1="59" x2="80" y2="181" stroke="#2e322e" stroke-width="3"/>
+        <path d="M50 66 Q28 81 22 141 L34 143 Q38 91 54 76 Z" fill="#1e221e" stroke="#3a3e3a" stroke-width=".8"/>
+        <path d="M110 66 Q132 81 138 141 L126 143 Q122 91 106 76 Z" fill="#1e221e" stroke="#3a3e3a" stroke-width=".8"/>
+        <ellipse cx="27" cy="149" rx="8" ry="12" fill="#1e221e" stroke="#3a3e3a" stroke-width=".8"/>
+        <ellipse cx="133" cy="149" rx="8" ry="12" fill="#1e221e" stroke="#3a3e3a" stroke-width=".8"/>
+        <path d="M55 181 Q48 221 46 271 L68 271 Q68 226 72 186 Z" fill="#1e221e" stroke="#3a3e3a" stroke-width=".8"/>
+        <path d="M105 181 Q112 221 114 271 L92 271 Q92 226 88 186 Z" fill="#1e221e" stroke="#3a3e3a" stroke-width=".8"/>
+        <path d="M46 271 Q44 306 46 321 L66 321 Q66 306 68 271 Z" fill="#1e221e" stroke="#3a3e3a" stroke-width=".8"/>
+        <path d="M114 271 Q116 306 114 321 L94 321 Q94 306 92 271 Z" fill="#1e221e" stroke="#3a3e3a" stroke-width=".8"/>
+        <ellipse cx="56" cy="327" rx="12" ry="7" fill="#1e221e" stroke="#3a3e3a" stroke-width=".8"/>
+        <ellipse cx="104" cy="327" rx="12" ry="7" fill="#1e221e" stroke="#3a3e3a" stroke-width=".8"/>
+        <g class="hs" onclick="go('scoliosis')"><rect x="68" y="59" width="24" height="110" rx="5" fill="rgba(251,146,60,.18)" stroke="#fb923c" stroke-width="1.5" stroke-dasharray="3,2"/><text x="80" y="100" text-anchor="middle" fill="#fb923c" font-size="7" font-family="sans-serif">측만</text></g>
+        <g class="hs" onclick="go('lpelvic')"><rect x="50" y="149" width="60" height="30" rx="6" fill="rgba(251,191,36,.18)" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="3,2"/><text x="80" y="164" text-anchor="middle" fill="#fbbf24" font-size="7" font-family="sans-serif">골반경사</text></g>
+        <g class="hs" onclick="go('apt')"><ellipse cx="56" cy="197" rx="16" ry="18" fill="rgba(74,222,128,.14)" stroke="#4ade80" stroke-width="1.5" stroke-dasharray="3,2"/><ellipse cx="104" cy="197" rx="16" ry="18" fill="rgba(74,222,128,.14)" stroke="#4ade80" stroke-width="1.5" stroke-dasharray="3,2"/><text x="80" y="200" text-anchor="middle" fill="#4ade80" font-size="7" font-family="sans-serif">둔근</text></g>
+      </svg>
+    </div>
+  </div>
+
+  <div style="font-family:var(--mo);font-size:11px;color:var(--g);text-transform:uppercase;letter-spacing:.1em;margin:24px 0 10px;display:flex;align-items:center;gap:8px;">체형 교정<span style="flex:1;height:1px;background:var(--b1);display:inline-block;"></span></div>
+  <div class="pg" style="margin-bottom:24px;">
+    <div class="pc" onclick="go('fhp')"><div class="pn">두부전방·라운드숄더</div><div class="ps">FHP · UCS</div></div>
+    <div class="pc" onclick="go('thoracic')"><div class="pn">흉추후만</div><div class="ps">Thoracic Kyphosis</div></div>
+    <div class="pc" onclick="go('scoliosis')"><div class="pn">척추측만</div><div class="ps">Schroth Method</div></div>
+    <div class="pc" onclick="go('apt')"><div class="pn">골반 전방경사</div><div class="ps">APT · LCS</div></div>
+    <div class="pc" onclick="go('ppt')"><div class="pn">골반 후방경사</div><div class="ps">PPT · 편평등</div></div>
+    <div class="pc" onclick="go('lpelvic')"><div class="pn">골반 측방경사</div><div class="ps">Lateral Tilt</div></div>
+    <div class="pc" onclick="go('valgus')"><div class="pn">외반슬</div><div class="ps">X자 다리 · 원인감별</div></div>
+    <div class="pc" onclick="go('varus')"><div class="pn">내반슬</div><div class="ps">O자 다리</div></div>
+    <div class="pc" onclick="go('recurvatum')"><div class="pn">백니</div><div class="ps">Genu Recurvatum</div></div>
+    <div class="pc" onclick="go('hallux')"><div class="pn">무지외반</div><div class="ps">Hallux Valgus</div></div>
+  </div>
+
+  <div style="font-family:var(--mo);font-size:11px;color:var(--g);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;display:flex;align-items:center;gap:8px;">재활 프로그램<span style="flex:1;height:1px;background:var(--b1);display:inline-block;"></span></div>
+  <div class="pg" style="margin-bottom:24px;">
+    <div class="pc" onclick="go('hivd')"><div class="pn">허리 디스크</div><div class="ps">HIVD</div></div>
+    <div class="pc" onclick="go('stenosis')"><div class="pn">요추 협착증</div><div class="ps">Lumbar Stenosis</div></div>
+    <div class="pc" onclick="go('cdisc')"><div class="pn">경추 디스크</div><div class="ps">신경근병증</div></div>
+    <div class="pc" onclick="go('impingement')"><div class="pn">어깨 충돌증후군</div><div class="ps">SIS · 극상근</div></div>
+    <div class="pc" onclick="go('rctear')"><div class="pn">회전근개 파열</div><div class="ps">보존 / 수술 후</div></div>
+    <div class="pc" onclick="go('frozen')"><div class="pn">오십견</div><div class="ps">Adhesive Capsulitis</div></div>
+    <div class="pc" onclick="go('cts')"><div class="pn">수근관 증후군</div><div class="ps">CTS · 손 저림</div></div>
+    <div class="pc" onclick="go('tos')"><div class="pn">흉곽출구증후군</div><div class="ps">TOS</div></div>
+    <div class="pc" onclick="go('pfps')"><div class="pn">앞무릎 (PFPS)</div><div class="ps">슬개대퇴통증</div></div>
+    <div class="pc" onclick="go('medknee')"><div class="pn">내측 무릎</div><div class="ps">반월판·거위발·MCL</div></div>
+    <div class="pc" onclick="go('latknee')"><div class="pn">외측 무릎 (ITBS)</div><div class="ps">장경인대증후군</div></div>
+    <div class="pc" onclick="go('postknee')"><div class="pn">후방 무릎 (PCL)</div><div class="ps">베이커낭종·PCL</div></div>
+    <div class="pc" onclick="go('ankle')"><div class="pn">발목 재활</div><div class="ps">염좌 · 아킬레스</div></div>
+    <div class="pc" onclick="go('hip')"><div class="pn">고관절 재활</div><div class="ps">FAI · 이상근</div></div>
+    <div class="pc" onclick="go('elbow')"><div class="pn">팔꿈치 재활</div><div class="ps">테니스 · 골프엘보</div></div>
+  </div>
+
+  <div style="font-family:var(--mo);font-size:11px;color:var(--g);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;display:flex;align-items:center;gap:8px;">평가 & 도구<span style="flex:1;height:1px;background:var(--b1);display:inline-block;"></span></div>
+  <div class="pg">
+    <div class="pc" onclick="go('initial-eval')" style="border-color:rgba(74,222,128,.4);background:var(--gd);"><div class="pn" style="color:var(--g);">초기 체형 평가</div><div class="ps">신규 회원 스크리닝</div></div>
+    <div class="pc" onclick="go('assessment')"><div class="pn">임상 평가 테스트</div><div class="ps">Red Flag · 기능 평가</div></div>
+    <div class="pc" onclick="go('chain')"><div class="pn">체형→통증 연쇄</div><div class="ps">Kinetic Chain Map</div></div>
+    <div class="pc" onclick="go('pubmed')"><div class="pn">논문 검색</div><div class="ps">PubMed · PEDro · JOSPT</div></div>
+  </div>
+</div>
+<!-- HIVD -->
+<div class="page" id="page-hivd">
+  <div class="ph"><div class="bc">척추 재활</div><h2>허리 디스크 (HIVD) — 요추 추간판 탈출증</h2><p>수핵이 섬유륜을 뚫고 탈출해 신경근 압박. 95%는 보존치료로 회복. 운동치료가 1차 권고입니다.</p></div>
+  <div class="al al-r"><span></span><div><strong>즉시 의뢰 (Red Flags)</strong>마미총 증후군(대소변 장애·회음부 감각 소실) / 양측 하지 마비 / 급격한 신경 증상 악화 → 신경외과 즉시 의뢰</div></div>
+  <div class="al al-b"><span></span><div><strong>논문 근거</strong>Du et al. Frontiers Medicine (2025) Meta-analysis, 8 RCTs, n=611: 운동치료군이 대조군 대비 VAS, ODI, ROM, SF-36 모두 유의미하게 개선 (p&lt;0.05). 코어 강화+요추 안정화가 핵심 기전.</div></div>
+  <div class="tbl-wrap">
+    <table class="tbl">
+      <tr><th>방향 선호 (McKenzie)</th><th>특징</th><th>운동 방향</th></tr>
+      <tr><td>신전 선호 (가장 흔함)</td><td>구부릴 때 악화, 누우면 호전</td><td>신전 운동 (엎드려 팔꿈치 지지)</td></tr>
+      <tr><td>굴곡 선호</td><td>걸을수록 악화, 앉으면 호전</td><td>굴곡 운동 (무릎 가슴 당기기)</td></tr>
+      <tr><td>방향 무관</td><td>모든 방향 통증</td><td>안정화 운동 우선</td></tr>
+    </table>
+  </div>
+  <div class="ptabs">
+    <button class="ptab active" onclick="pp('hivd','p1',this)">1단계 · 급성기 (0–2주)</button>
+    <button class="ptab" onclick="pp('hivd','p2',this)">2단계 · 아급성기 (2–6주)</button>
+    <button class="ptab" onclick="pp('hivd','p3',this)">3단계 · 만성기·재발방지</button>
+  </div>
+  <div class="pp active" id="hivd-p1">
+    <div class="al al-o"><span></span><div><strong>급성기 원칙</strong>절대 안정은 해롭습니다. 통증 없는 범위에서 움직이고, 신경근 자극 자세는 즉시 중단합니다.</div></div>
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">맥켄지 신전 (Prone Press-up)</div><div class="ec-meta">10회 × 시간당 · 신전 선호형</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tg">초급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">시간당 10회</span><span class="ec-chip">신전 선호형</span></div><div class="ec-point">엎드려 팔꿈치로 지지하며 천천히 상체를 들어올립니다. 다리 증상이 중심으로 이동하면(centralization) 좋은 신호입니다.</div><div class="ec-desc">수핵을 전방으로 밀어 신경 압박을 줄이는 원리. 증상 집중화가 확인되면 계속 진행합니다.</div><div class="ec-ref">Du et al. Frontiers Medicine 2025 Meta-analysis — 운동치료가 VAS, ODI, ROM 유의미하게 개선</div><div class="ec-warn">다리 통증이 더 말초로 퍼지면(peripheralization) 즉시 중단하고 방향을 바꿉니다.</div></div></div>
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">복횡근 드로우인 (Draw-in)</div><div class="ec-meta">3세트 × 10초 × 10회</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tg">초급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">3세트 × 10초 × 10회</span><span class="ec-chip">숨 참지 않기</span></div><div class="ec-point">배꼽을 척추 방향으로 당기며 복횡근만 수축합니다. 숨을 참지 않고 정상 호흡을 유지합니다.</div><div class="ec-ref">McGill 척추 안정화 — 복횡근 선택적 활성화가 요추 분절 안정화 핵심</div></div></div>
+  </div>
+  <div class="pp" id="hivd-p2">
+    <div class="al al-g"><span></span><div><strong>아급성기 원칙</strong>코어 안정화를 점진적으로 강화합니다. VAS 3 이하에서 다음 단계로 진행합니다.</div></div>
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">버드독 (Bird Dog)</div><div class="ec-meta">3세트 × 8회/측 · 다열근·복횡근</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag to">중급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">3세트 × 8회/측</span><span class="ec-chip">척추 중립 절대 유지</span></div><div class="ec-point">네발기기 자세에서 반대편 팔·다리를 동시에 들어 5초 유지합니다. 허리가 처지거나 회전되면 즉시 수정합니다.</div><div class="ec-ref">Du et al. 2025 — 코어 강화 운동이 LDH ODI·ROM 유의미하게 개선</div></div></div>
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">데드버그 (Dead Bug)</div><div class="ec-meta">3세트 × 8회/측</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag to">중급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">요추 바닥 밀착 필수</span></div><div class="ec-point">누운 자세에서 반대편 팔·다리를 천천히 뻗습니다. 요추가 바닥에서 떨어지는 순간 멈춥니다.</div><div class="ec-ref">McGill Back Mechanics — Dead Bug이 요추 중립 안정화 핵심 운동</div></div></div>
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">힙 브릿지</div><div class="ec-meta">3세트 × 15회</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tg">초급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">허리 아닌 엉덩이 힘</span></div><div class="ec-point">무릎 세우고 발바닥으로 밀어 엉덩이를 들어올립니다. 허리가 과도하게 젖혀지지 않도록 합니다.</div><div class="ec-ref">Du et al. 2025 — 코어+둔근 복합 강화가 LDH 기능 회복 최적 프로토콜</div></div></div>
+  </div>
+  <div class="pp" id="hivd-p3">
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">플랭크 (Plank)</div><div class="ec-meta">3세트 × 20–40초</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tr">고급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">3세트 × 20–40초</span></div><div class="ec-point">팔꿈치 플랭크로 전신 코어를 유지합니다. 허리가 처지지 않도록 복횡근을 수축합니다.</div><div class="ec-warn">허리가 처지는 순간 세트를 종료합니다.</div><div class="ec-ref">Du et al. 2025 — 코어 지구력 훈련이 LDH 재발 방지 핵심</div></div></div>
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">고정식 자전거 (저부하)</div><div class="ec-meta">20–30분 · 유산소·디스크 영양</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tg">초급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">안장 높게 설정</span><span class="ec-chip">요추 굴곡 최소화</span></div><div class="ec-point">안장을 높게 설정해 요추 굴곡을 최소화합니다. 디스크 영양 공급(펌프 효과)을 돕습니다.</div><div class="ec-ref">재활의학 권고 — 자전거가 LDH 보존치료 유산소 1차 선택</div></div></div>
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">자세 교육 (앉기·들기·자기)</div><div class="ec-meta">상시 · 재발 방지</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tb">보조</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">앉기: 요추 전만 유지</span><span class="ec-chip">들기: 스쿼트 자세</span><span class="ec-chip">자기: 옆으로·무릎 사이 베개</span></div><div class="ec-point">앉을 때 요추 전만 유지, 물건 들 때 무릎을 굽혀 들기, 옆으로 잘 때 무릎 사이 베개를 사용합니다.</div><div class="ec-ref">Du et al. 2025 — 운동+자세교육 복합이 SF-36 유의미하게 개선</div></div></div>
+  </div>
+</div>
+
+<!-- 요추 협착증 -->
+<div class="page" id="page-stenosis">
+  <div class="ph"><div class="bc">척추 재활</div><h2>요추 협착증 (Lumbar Spinal Stenosis)</h2><p>척추관이 좁아져 신경 압박. 걷다 쉬어야 하는 신경인성 파행이 특징. 굴곡 자세에서 증상이 완화됩니다 (디스크와 반대).</p></div>
+  <div class="al al-r"><span></span><div><strong>의뢰</strong>100m 미만 보행 제한 / 양측 하지 증상 / 배변·배뇨 장애 → 신경외과 평가 의뢰</div></div>
+  <div class="al al-b"><span></span><div><strong>논문 근거</strong>Rehabilitation after lumbar surgery SR (PMC 2023, n=60): 감독형 능동 운동이 협착증 통증·기능·삶의 질 단기·중기 모두 개선. 굴곡 선호 운동 + 자전거가 핵심.</div></div>
+  <div class="tbl-wrap">
+    <table class="tbl">
+      <tr><th>항목</th><th>협착증</th><th>디스크(HIVD)</th></tr>
+      <tr><td>악화 자세</td><td>서기·걷기·신전</td><td>구부리기·앉기</td></tr>
+      <tr><td>완화 자세</td><td>앞으로 굽히기·앉기·자전거</td><td>신전·누워서</td></tr>
+      <tr><td>운동 방향</td><td>굴곡 운동 중심</td><td>신전 운동 중심</td></tr>
+    </table>
+  </div>
+  <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">무릎 가슴 당기기 (Knee-to-Chest)</div><div class="ec-meta">3세트 × 30초 · 굴곡 감압</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tg">초급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">3세트 × 30초</span></div><div class="ec-point">누워서 양 무릎을 가슴 쪽으로 당겨 척추관을 열어줍니다. 증상이 즉각적으로 완화되어야 합니다.</div><div class="ec-ref">PMC 2023 SR — 굴곡 선호 운동이 협착증 신경인성 파행 개선에 유효</div></div></div>
+  <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">고정식 자전거 (굴곡 자세)</div><div class="ec-meta">20–30분 · 신경인성 파행 대체</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tg">초급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">안장 낮게·전방 기울기</span></div><div class="ec-point">앞으로 약간 구부린 자세의 자전거는 척추관을 열어주어 통증 없이 유산소를 할 수 있는 최적의 운동입니다.</div><div class="ec-ref">PMC 2023 SR — 자전거가 협착증 기능 개선 Grade A 권고</div></div></div>
+  <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">버드독 + 코어 안정화</div><div class="ec-meta">3세트 × 8회/측</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag to">중급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">HIVD와 동일</span></div><div class="ec-point">척추 중립에서 사지를 움직이는 안정화 훈련. 협착증에서도 코어 강화가 증상 완화에 기여합니다.</div><div class="ec-ref">Niederer et al. 2020 — MCE가 요통·기능 장기 개선</div></div></div>
+</div>
+
+<!-- 경추 디스크 -->
+<div class="page" id="page-cdisc">
+  <div class="ph"><div class="bc">척추 재활</div><h2>경추 디스크 & 신경근병증 — 손 저림 감별</h2><p>경추 추간판이 신경근을 압박해 팔·손 방사통·저림·근력 저하 유발. 손 저림의 경추성 원인 감별이 핵심입니다.</p></div>
+  <div class="al al-r"><span></span><div><strong>즉시 의뢰</strong>양측 상지 마비 / 척수병증(보행 장애·손 떨림·대소변 장애) / 근위축 진행 → 신경외과 즉시 의뢰</div></div>
+  <div class="al al-b"><span></span><div><strong>논문 근거</strong>Jull et al. Man Ther (2018): DNF 강화가 경추 기능장애 표준 보존치료. Cho et al. J Back Musculoskelet Rehabil (2019) RCT: 경추 가동화+DNF 운동이 FHP·경추 기능 개선.</div></div>
+  <div class="tbl-wrap">
+    <table class="tbl">
+      <tr><th>레벨</th><th>압박 신경근</th><th>저림 부위</th><th>근력 저하</th></tr>
+      <tr><td>C5-C6</td><td>C6</td><td>엄지·검지·전완 외측</td><td>이두근·손목 신전근</td></tr>
+      <tr><td>C6-C7</td><td>C7 (가장 흔함)</td><td>중지·전완 후측</td><td>삼두근·손가락 신전근</td></tr>
+      <tr><td>C7-T1</td><td>C8</td><td>소지·전완 내측</td><td>손 내재근</td></tr>
+    </table>
+  </div>
+  <div class="ptabs">
+    <button class="ptab active" onclick="pp('cdisc','p1',this)">1단계 · 감압·신경 활강</button>
+    <button class="ptab" onclick="pp('cdisc','p2',this)">2단계 · 심부 안정화</button>
+    <button class="ptab" onclick="pp('cdisc','p3',this)">3단계 · 강화</button>
+  </div>
+  <div class="pp active" id="cdisc-p1">
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">신경 활강 운동 (Neural Mobilization)</div><div class="ec-meta">3세트 × 10회</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tg">초급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">통증 없는 범위만</span></div><div class="ec-point">팔을 옆으로 뻗어 손목·목을 교대로 구부리고 폅니다. 당기는 느낌은 괜찮으나 전기 오는 느낌은 즉시 중단합니다.</div><div class="ec-ref">경추 신경근병증 보존치료 지침 — 신경 활강 운동이 방사통 감소에 유효</div><div class="ec-warn">전기 충격 같은 통증 시 즉시 중단합니다.</div></div></div>
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">경추 자가 견인 운동</div><div class="ec-meta">3세트 × 20초</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tg">초급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">양손으로 후두골 받치기</span></div><div class="ec-point">누운 자세에서 양손으로 후두골을 받치고 부드럽게 위로 당겨 경추를 견인합니다.</div><div class="ec-ref">경추 신경근병증 보존치료 — 간헐적 견인이 단기 방사통 감소에 유효 (Grade B)</div></div></div>
+  </div>
+  <div class="pp" id="cdisc-p2">
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">심부경추굴근 훈련 (Chin Tuck)</div><div class="ec-meta">3세트 × 10초 × 10회</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag to">중급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">흉쇄유돌근 과활성 주의</span></div><div class="ec-point">누워서 턱을 당겨 뒷목을 바닥에 붙이는 느낌. 심부 근육만 사용합니다.</div><div class="ec-ref">Jull et al. Man Ther 2018 — DNF 강화가 경추 기능장애 표준 치료</div></div></div>
+  </div>
+  <div class="pp" id="cdisc-p3">
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">경추 등척성 저항 운동 (4방향)</div><div class="ec-meta">4방향 × 10초 × 10회</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag to">중급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">전·후·좌·우 4방향</span><span class="ec-chip">관절 움직임 없이</span></div><div class="ec-point">손으로 이마·후두부·측두부에 저항을 주며 목을 각 방향으로 밉니다. 등척성으로만 수행합니다.</div><div class="ec-ref">JOSPT 경추 재활 — 등척성 강화가 경추 안정화의 안전한 진행 방법</div></div></div>
+  </div>
+</div>
+
+<!-- 어깨 충돌증후군 -->
+<div class="page" id="page-impingement">
+  <div class="ph"><div class="bc">어깨 재활</div><h2>어깨 충돌증후군 (SIS) — 극상근 압박</h2><p>팔을 들어올릴 때 극상근·점액낭이 견봉에 끼이는 증후군. 라운드숄더·흉추후만·전거근 약화가 근본 원인입니다.</p></div>
+  <div class="al al-b"><span></span><div><strong>논문 근거</strong>Frontiers Bioeng Biotechnol 2025 SR (13 RCTs, n=690): 특이적 운동이 VAS -0.31 (p&lt;0.0001), CMS +0.59 (p&lt;0.00001), DASH -0.60 (p&lt;0.0001) 유의미하게 개선. 견갑골 안정화 운동이 핵심.</div></div>
+  <div class="chain">
+    <div class="cn" style="background:var(--pud);color:var(--pu)">흉추후만·라운드숄더</div><span class="ca">→</span>
+    <div class="cn" style="background:var(--od);color:var(--o)">견봉하 공간↓</div><span class="ca">→</span>
+    <div class="cn" style="background:var(--rd);color:var(--r)">극상근·점액낭 충돌</div><span class="ca">→</span>
+    <div class="cn" style="background:var(--rd);color:var(--r)">건염·파열</div>
+  </div>
+  <div class="ptabs">
+    <button class="ptab active" onclick="pp('simp','p1',this)">1단계 · 이완</button>
+    <button class="ptab" onclick="pp('simp','p2',this)">2단계 · 견갑 안정화</button>
+    <button class="ptab" onclick="pp('simp','p3',this)">3단계 · 강화</button>
+  </div>
+  <div class="pp active" id="simp-p1">
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">소흉근 코너 스트레칭</div><div class="ec-meta">3세트 × 30초</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tg">초급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">3세트 × 30초</span></div><div class="ec-point">벽 모서리에서 양팔 90°, 몸통 앞으로 기울입니다. 가슴이 열리는 느낌이 나야 합니다.</div><div class="ec-ref">Moezy RCT — SSE 포함 시 전방어깨 위치 p&lt;0.0001 개선</div></div></div>
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">흉추 폼롤러 신전 (T4-T8)</div><div class="ec-meta">각 구역 60초</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tg">초급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">T4→T6→T8 순서</span></div><div class="ec-point">흉추 후만 교정으로 견봉하 공간을 즉각적으로 늘립니다.</div><div class="ec-ref">Thoracic MT SR PMC 2025 — 흉추 가동화가 SIS 통증·ROM 즉각 개선</div></div></div>
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">슬리퍼 스트레칭 (후관절낭)</div><div class="ec-meta">3세트 × 30초/측</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tg">초급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">3세트 × 30초/측</span></div><div class="ec-point">옆으로 누워 팔을 앞으로, 반대손으로 손목을 잡아 내회전합니다.</div><div class="ec-ref">Moezy RCT — 외회전 ROM p=0.001 개선</div></div></div>
+  </div>
+  <div class="pp" id="simp-p2">
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">견갑골 후인 (Scapular Retraction)</div><div class="ec-meta">3세트 × 15회 × 5초</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag to">중급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">상부승모근 힘 빼기</span></div><div class="ec-point">어깨뼈를 척추 쪽으로 당겨 5초 유지합니다.</div><div class="ec-ref">Sepehri 2024 BMC — 견갑골 운동이 가장 효과적인 단독 교정 운동</div></div></div>
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">Wall Slide Y-T-W</div><div class="ec-meta">3세트 × 10회 · 하부승모근·전거근</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag to">중급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">Y→T→W 순서</span></div><div class="ec-point">벽에 기대어 Y자로 팔을 올리며 견갑골을 하방 회전합니다.</div><div class="ec-ref">Moezy RCT — 어깨 외전 ROM p=0.024, 전방어깨 위치 p&lt;0.0001 개선</div></div></div>
+  </div>
+  <div class="pp" id="simp-p3">
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">사이드 라잉 외회전 (ER)</div><div class="ec-meta">3세트 × 15회 · 가시하근·소원근</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag to">중급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">옆으로 누워</span><span class="ec-chip">최고점 1초 유지</span></div><div class="ec-point">팔꿈치를 옆구리에 붙이고 외회전. 최고점에서 1초 유지합니다.</div><div class="ec-ref">Dominguez-Romero 2021 SR — 외회전 강화가 RC 건병변 통증·기능 개선</div></div></div>
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">Push-up Plus (전거근)</div><div class="ec-meta">3세트 × 12회</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tr">고급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">플랭크 자세에서</span></div><div class="ec-point">플랭크에서 팔꿈치를 미세하게 구부렸다 펴며 어깨뼈를 전인합니다.</div><div class="ec-ref">EMG 연구 — Push-up Plus가 전거근 최고 활성화 운동</div></div></div>
+  </div>
+</div>
+
+<!-- 회전근개 파열 -->
+<div class="page" id="page-rctear">
+  <div class="ph"><div class="bc">어깨 재활</div><h2>회전근개 파열 (Rotator Cuff Tear)</h2><p>부분 파열은 보존치료 우선. 완전 파열은 나이·활동수준·파열 크기에 따라 결정. 65세 이상은 보존치료 먼저 시도합니다.</p></div>
+  <div class="al al-r"><span></span><div><strong>수술 의뢰 고려</strong>65세 미만 + 급성 완전 파열 &gt;1.5cm / 보존치료 6개월 실패 / 근위축·지방 침윤 진행 → 정형외과 의뢰</div></div>
+  <div class="al al-b"><span></span><div><strong>논문 근거</strong>Full-thickness RCT SR (PMC 2018): 운동치료가 통증·ROM·기능 개선에 유효. 65세 이상은 보존치료가 수술과 유사한 결과. Conservative SR (PubMed 2023): 편심성 재활이 부분 파열에서 건 두께 감소 및 근력 회복 유의미.</div></div>
+  <div class="tbl-wrap">
+    <table class="tbl">
+      <tr><th>파열 유형</th><th>1차 치료</th><th>재활 강도</th></tr>
+      <tr><td>부분 파열 (&lt;50%)</td><td>보존치료 우선</td><td>편심성 강화 중심</td></tr>
+      <tr><td>완전 파열 (소·중, 65세+)</td><td>보존치료 시도</td><td>삼각근 보조 강화</td></tr>
+      <tr><td>완전 파열 (65세 미만)</td><td>수술 고려</td><td>수술 후 재활 프로토콜</td></tr>
+    </table>
+  </div>
+  <div class="ptabs">
+    <button class="ptab active" onclick="pp('rct','p1',this)">보존치료 재활</button>
+    <button class="ptab" onclick="pp('rct','p2',this)">수술 후 (0–6주)</button>
+    <button class="ptab" onclick="pp('rct','p3',this)">수술 후 (6주+)</button>
+  </div>
+  <div class="pp active" id="rct-p1">
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">진자 운동 (Pendulum)</div><div class="ec-meta">3세트 × 2분 · 초기 가동성</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tg">초급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">3세트 × 2분</span><span class="ec-chip">중력만 이용</span></div><div class="ec-point">테이블에 기대어 팔을 늘어뜨리고 원형, 전후, 좌우로 흔듭니다. 근육 수축 없이 중력만으로 움직입니다.</div><div class="ec-ref">RC 재활 Clinical Commentary — 진자 운동이 RC 파열 초기 가동성 회복 표준</div></div></div>
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">편심성 외회전 (Eccentric ER)</div><div class="ec-meta">3세트 × 15회 · 건 강화</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag to">중급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">내회전 천천히 3–5초</span></div><div class="ec-point">밴드로 외회전 후 천천히 3–5초에 걸쳐 내회전으로 돌아옵니다. 편심성 구간이 핵심입니다.</div><div class="ec-ref">Conservative SR PubMed 2023 — 편심성 재활이 부분 파열 건 두께 감소 및 근력 회복 유의미</div></div></div>
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">삼각근 강화 (측면 들기 90° 이하)</div><div class="ec-meta">3세트 × 15회 · 삼각근 보조</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag to">중급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">90° 이하 유지</span></div><div class="ec-point">팔을 옆으로 90° 이하로 천천히 들어올립니다. RC 기능 소실 시 삼각근이 보상 역할을 합니다.</div><div class="ec-ref">Levy et al. — 삼각근 재활로 대형 RC 파열 14/17명 Constant score 유의미하게 개선</div></div></div>
+  </div>
+  <div class="pp" id="rct-p2">
+    <div class="al al-r"><span></span><div><strong>수술 후 0–6주 (보호기)</strong>봉합 부위 보호 최우선. 능동 외전·외회전 절대 금지. 주치의 지시 프로토콜 엄수.</div></div>
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">수동 ROM (주치의 허가 후)</div><div class="ec-meta">반대손 보조 수동 가동</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tg">초급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">주치의 허가 범위만</span></div><div class="ec-point">반대손 또는 도르래를 이용해 수동으로 팔을 올립니다. 봉합 부위에 장력이 가지 않도록 합니다.</div><div class="ec-danger">능동 근수축으로 팔을 올리면 봉합부가 파열될 수 있습니다.</div></div></div>
+  </div>
+  <div class="pp" id="rct-p3">
+    <div class="al al-g"><span></span><div><strong>수술 후 6주+ (강화기)</strong>봉합부 치유 확인 후 점진적 강화. 6–8주: 등척성 → 12주+: 저항 강화</div></div>
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">등척성 외회전 강화</div><div class="ec-meta">3세트 × 10초 × 10회</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag to">중급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">6–8주 이후 시작</span></div><div class="ec-point">팔꿈치 옆구리에 붙이고 벽에 손등을 대고 외회전 방향으로 5–6초 수축합니다.</div><div class="ec-ref">RC Tear 재활 가이드라인 — 등척성 강화가 6–8주 재활의 안전한 시작점</div></div></div>
+  </div>
+</div>
+
+<!-- 오십견 -->
+<div class="page" id="page-frozen">
+  <div class="ph"><div class="bc">어깨 재활</div><h2>오십견 (유착성 관절낭염, Adhesive Capsulitis)</h2><p>관절낭 섬유화·수축으로 어깨 가동범위 전 방향 제한. 통증기→동결기→해동기 3단계 진행. 단계별 치료가 핵심입니다.</p></div>
+  <div class="al al-b"><span></span><div><strong>논문 근거</strong>Cochrane SR (2014, updated 2024): 도수치료+운동이 7주까지 통증 완화에 유효. Jain et al. 2014: 운동+가동화가 Stage 2·3에서 Grade A 권고. ScienceDirect 2021 SR: 운동치료가 ROM·기능·통증 개선에 유효.</div></div>
+  <div class="tbl-wrap">
+    <table class="tbl">
+      <tr><th>단계</th><th>기간</th><th>특징</th><th>재활 목표</th></tr>
+      <tr><td>1기 (통증기)</td><td>0–3개월</td><td>야간통 심함, 초기 ROM 제한</td><td>통증 감소, ROM 유지</td></tr>
+      <tr><td>2기 (동결기)</td><td>3–9개월</td><td>통증↓, 심한 ROM 제한</td><td>관절낭 신장, ROM 회복</td></tr>
+      <tr><td>3기 (해동기)</td><td>9–24개월</td><td>ROM 서서히 회복</td><td>근력 강화, 기능 회복</td></tr>
+    </table>
+  </div>
+  <div class="ptabs">
+    <button class="ptab active" onclick="pp('froz','p1',this)">1기 · 통증 감소</button>
+    <button class="ptab" onclick="pp('froz','p2',this)">2기 · ROM 회복</button>
+    <button class="ptab" onclick="pp('froz','p3',this)">3기 · 근력 강화</button>
+  </div>
+  <div class="pp active" id="froz-p1">
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">진자 운동 (Codman Pendulum)</div><div class="ec-meta">3세트 × 3분</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tg">초급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">중력만 이용</span></div><div class="ec-point">테이블에 기대어 팔을 늘어뜨리고 원형, 전후, 좌우로 흔듭니다. 통증 없는 범위에서만 합니다.</div><div class="ec-ref">Kelley et al. JOSPT 2013 — 진자 운동이 오십견 1기의 기본 ROM 운동</div></div></div>
+  </div>
+  <div class="pp" id="froz-p2">
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">도르래 ROM 운동 (Pulley)</div><div class="ec-meta">3세트 × 10회 · 굴곡 ROM</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag to">중급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">통증 한계점 이전까지</span></div><div class="ec-point">문 위에 도르래를 걸고 건강한 쪽 팔로 아픈 쪽을 들어올립니다. 통증 한계점 바로 전까지만 당깁니다.</div><div class="ec-ref">Jain et al. 2014 Grade A — 운동이 Stage 2·3 오십견 ROM·통증·기능 개선</div></div></div>
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">슬리퍼 스트레칭 (후관절낭)</div><div class="ec-meta">3세트 × 30초</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag to">중급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">내회전 ROM 집중</span></div><div class="ec-point">옆으로 누워 후관절낭을 집중적으로 신장합니다. 동결기에 가장 제한되는 내회전 ROM 회복에 핵심입니다.</div><div class="ec-ref">Kelley JOSPT 2013 — 후관절낭 단축이 핵심 병리, 슬리퍼 스트레칭이 표준</div></div></div>
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">외회전 타월 스트레칭</div><div class="ec-meta">3세트 × 30초</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag to">중급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">등 뒤 타월</span></div><div class="ec-point">등 뒤에서 타월 양끝을 잡고 건강한 쪽이 위에서 아픈 쪽 팔을 천천히 당깁니다.</div><div class="ec-ref">Cochrane SR 2024 — 도수치료+운동이 7주 통증·ROM 개선</div></div></div>
+  </div>
+  <div class="pp" id="froz-p3">
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">밴드 외회전 강화</div><div class="ec-meta">3세트 × 15회 · ROM 회복 후</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tr">고급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">ROM 충분히 회복 후 시작</span></div><div class="ec-point">ROM이 회복된 후 밴드 저항으로 회전근개를 강화합니다.</div><div class="ec-ref">ScienceDirect 2021 SR — 운동치료가 해동기 오십견 근력·기능 회복에 유효</div></div></div>
+  </div>
+</div>
+
+<!-- CTS -->
+<div class="page" id="page-cts">
+  <div class="ph"><div class="bc">신경·손목</div><h2>수근관 증후군 (CTS) — 손 저림 엄지·검지·중지</h2><p>정중신경이 수근관에서 압박. 엄지·검지·중지·약지 요측 저림, 야간 저림이 전형적. 경추 디스크·TOS와 반드시 감별합니다.</p></div>
+  <div class="al al-r"><span></span><div><strong>수술 의뢰</strong>근전도 중등도 이상 손상 / 무지구근 위축 / 6개월 보존치료 실패 → 수근관 감압술</div></div>
+  <div class="al al-b"><span></span><div><strong>논문 근거</strong>Cochrane SR CTS: 야간 부목·신경 활강 운동이 경도·중등도 CTS 증상 개선에 근거 있음 (Grade B). JOSPT 임상 지침: 신경 활강 + 손목 굴곡근 스트레칭이 보존치료 1차.</div></div>
+  <div class="tbl-wrap">
+    <table class="tbl">
+      <tr><th>감별</th><th>CTS</th><th>경추 C6 신경근병증</th><th>TOS</th></tr>
+      <tr><td>저림 부위</td><td>엄지·검지·중지·약지 요측</td><td>엄지·검지·전완 외측</td><td>소지·약지·전완 내측</td></tr>
+      <tr><td>야간 악화</td><td>뚜렷함</td><td>덜함</td><td>자세에 따라</td></tr>
+      <tr><td>특이 검사</td><td>Phalen +, Tinel +</td><td>Spurling +</td><td>Roos + (팔 들고 손 쥐기)</td></tr>
+    </table>
+  </div>
+  <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">야간 손목 부목 (Night Splint)</div><div class="ec-meta">수면 중 착용</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tb">보조</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">손목 중립~15° 신전 고정</span></div><div class="ec-point">손목을 중립 또는 0–15° 신전 위치로 고정하는 부목을 착용합니다. 수면 중 손목 굴곡이 수근관 압력을 2배 이상 높입니다.</div><div class="ec-ref">Cochrane SR CTS — 야간 부목이 경도·중등도 CTS 증상 감소에 근거 있음 (Grade B)</div></div></div>
+  <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div class="ec-ic">CTS</div><div><div class="ec-name">정중신경 활강 운동 (Median Nerve Gliding)</div><div class="ec-meta">3세트 × 10회</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tg">초급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">6단계 순서대로</span><span class="ec-chip">천천히·부드럽게</span></div><div class="ec-point">① 손 편 상태 → ② 손목 신전 → ③ 손가락 신전 → ④ 엄지 외전 → ⑤ 전완 회외 → ⑥ 엄지 스트레칭. 각 자세 3초 유지.</div><div class="ec-ref">JOSPT CTS 임상 지침 — 신경 활강 운동이 보존치료 1차 권고</div><div class="ec-warn">전기 오는 느낌(Paresthesia)이 심해지면 즉시 중단합니다.</div></div></div>
+  <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">손목 굴곡근 스트레칭</div><div class="ec-meta">3세트 × 30초</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tg">초급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">3세트 × 30초</span></div><div class="ec-point">팔을 앞으로 뻗어 손목을 뒤로 젖혀 손바닥이 앞을 향하게 스트레칭합니다.</div><div class="ec-ref">JOSPT CTS 지침 — 손목 굴곡근 스트레칭이 수근관 압력 감소에 유효</div></div></div>
+</div>
+
+<!-- TOS -->
+<div class="page" id="page-tos">
+  <div class="ph"><div class="bc">신경·손목</div><h2>흉곽출구증후군 (TOS) — 소지·약지 저림</h2><p>사각근·소흉근 사이에서 상완신경총·혈관이 압박됩니다. 라운드숄더·두부전방과 거의 항상 함께 옵니다. 소지·약지·전완 내측 저림이 특징입니다.</p></div>
+  <div class="al al-r"><span></span><div><strong>즉시 의뢰</strong>정맥성 TOS (팔 부종·청색증) / 동맥성 TOS (팔 창백·냉감·맥박 약화) → 혈관외과 즉시 의뢰. 신경성 TOS만 보존치료.</div></div>
+  <div class="al al-b"><span></span><div><strong>논문 근거</strong>TOS 재활 임상 지침: 사각근·소흉근 이완 + 1번 늑골 가동화 + 자세 교정이 신경성 TOS의 1차 보존치료. 라운드숄더 교정이 가장 중요한 원인 치료.</div></div>
+  <div class="chain">
+    <div class="cn" style="background:var(--pud);color:var(--pu)">라운드숄더·두부전방</div><span class="ca">→</span>
+    <div class="cn" style="background:var(--od);color:var(--o)">사각근·소흉근 단축</div><span class="ca">→</span>
+    <div class="cn" style="background:var(--rd);color:var(--r)">상완신경총 압박</div><span class="ca">→</span>
+    <div class="cn" style="background:var(--rd);color:var(--r)">소지·약지 저림</div>
+  </div>
+  <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">사각근 스트레칭 (전·중·후)</div><div class="ec-meta">3세트 × 30초/측</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tg">초급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">3세트 × 30초/측</span></div><div class="ec-point">머리를 반대쪽으로 기울이고 약간 신전·회전하여 사각근을 늘립니다. 반대손은 쇄골을 아래로 누릅니다.</div><div class="ec-ref">TOS 재활 지침 — 사각근 이완이 신경성 TOS 보존치료 1차 개입</div></div></div>
+  <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">소흉근 코너 스트레칭</div><div class="ec-meta">3세트 × 30초</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tg">초급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">2차 압박 지점 이완</span></div><div class="ec-point">코너 스트레칭으로 소흉근을 이완합니다. 소흉근 하방이 흉곽출구 2번째 압박 지점입니다.</div><div class="ec-ref">TOS 임상 지침 — 소흉근 가동화가 신경성 TOS 2차 압박 해소</div></div></div>
+  <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">상완신경총 활강 (ULNT 변형)</div><div class="ec-meta">3세트 × 10회</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag to">중급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">전문가 평가 후 진행</span></div><div class="ec-point">팔을 옆으로 90° 뻗어 손목·손가락을 신전합니다. 이 자세에서 머리를 반대쪽으로 기울이며 신경을 활강합니다.</div><div class="ec-ref">TOS 재활 — 신경 활강 운동이 신경성 TOS 증상 개선에 유효</div><div class="ec-warn">증상이 심해지면 즉시 중단합니다.</div></div></div>
+  <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">자세 교정 (라운드숄더 교정)</div><div class="ec-meta">상시 · 근본 원인 치료</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag to">중급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">흉추 신전 + 견갑 후인</span></div><div class="ec-point">라운드숄더·두부전방 교정이 TOS 재발 방지의 핵심입니다. FHP 재활 프로그램을 병행합니다.</div><div class="ec-ref">TOS 재발 방지 — 자세 교정이 흉곽출구 공간 유지의 장기 전략</div></div></div>
+</div>
+
+
+<!-- 체형 교정 페이지들 -->
+<div class="page" id="page-fhp">
+  <div class="ph"><div class="bc">체형 교정</div><h2>두부전방 & 라운드숄더 → 어깨충돌증후군</h2><p>상부교차증후군(UCS). FHP·라운드숄더는 견봉하 공간을 좁혀 극상근 건염·회전근개 파열의 직접 원인입니다.</p></div>
+  <div class="al al-b"><span></span><div><strong>논문 근거</strong>Sepehri et al. BMC Musculoskelet Disord (2024) SR+Meta: 치료적 운동이 FHP, 라운드숄더, 흉추후만각 유의미하게 개선 (p&lt;0.05). Lewis et al. JOSPT 2005: 자세 변화만으로도 어깨 ROM 즉시 개선.</div></div>
+  <div class="chain">
+    <div class="cn" style="background:var(--pud);color:var(--pu)">두부전방(FHP)</div><span class="ca">→</span>
+    <div class="cn" style="background:var(--od);color:var(--o)">흉추후만·라운드숄더</div><span class="ca">→</span>
+    <div class="cn" style="background:var(--rd);color:var(--r)">견봉하 공간↓ → 극상근 충돌</div>
+  </div>
+  <div class="ptabs">
+    <button class="ptab active" onclick="pp('fhp','p1',this)">1단계 · 이완</button>
+    <button class="ptab" onclick="pp('fhp','p2',this)">2단계 · 심부 안정화</button>
+    <button class="ptab" onclick="pp('fhp','p3',this)">3단계 · 견갑 강화</button>
+  </div>
+  <div class="pp active" id="fhp-p1">
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">소흉근 코너 스트레칭</div><div class="ec-meta">3세트 × 30초</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tg">초급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">3세트 × 30초</span></div><div class="ec-point">벽 모서리에서 양팔 90°, 몸통 앞으로 기울입니다.</div><div class="ec-ref">Sepehri 2024 BMC — 스트레칭+강화가 라운드숄더각 유의미하게 감소</div></div></div>
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">흉추 폼롤러 신전</div><div class="ec-meta">T4-T8 각 60초</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tg">초급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">T4→T6→T8 순서</span></div><div class="ec-point">흉추 아래에 폼롤러를 놓고 천천히 신전합니다.</div><div class="ec-ref">Thoracic MT SR PMC 2025 — 흉추 가동화가 SIS 통증·ROM 즉각 개선</div></div></div>
+  </div>
+  <div class="pp" id="fhp-p2">
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">심부경추굴근 Chin Tuck</div><div class="ec-meta">3세트 × 10초 × 10회</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag to">중급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">흉쇄유돌근 과활성 주의</span></div><div class="ec-point">누워서 턱을 당겨 뒷목을 바닥에 붙이는 느낌. 심부 근육만 사용합니다.</div><div class="ec-ref">Jull et al. Man Ther 2018 — DNF 강화가 FHP 표준 치료</div></div></div>
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">견갑골 후인 (5초 유지)</div><div class="ec-meta">3세트 × 15회</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag to">중급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">능형근·중부승모근</span></div><div class="ec-point">어깨뼈를 척추 쪽으로 당겨 5초 유지합니다.</div><div class="ec-ref">Sepehri 2024 — 견갑골 운동이 가장 효과적인 단독 교정 운동</div></div></div>
+  </div>
+  <div class="pp" id="fhp-p3">
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">Wall Slide Y-T-W</div><div class="ec-meta">3세트 × 10회 · 하부승모근·전거근</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag to">중급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">Y→T→W 순서</span></div><div class="ec-point">벽에 기대어 Y자로 팔을 올리며 견갑골을 하방 회전합니다.</div><div class="ec-ref">Moezy RCT — 어깨 외전 ROM p=0.024, 전방어깨 p&lt;0.0001 개선</div></div></div>
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">사이드 라잉 외회전</div><div class="ec-meta">3세트 × 15회</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag to">중급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">가시하근·소원근</span></div><div class="ec-point">옆으로 누워 팔꿈치 90°, 밴드로 외회전합니다.</div><div class="ec-ref">Dominguez-Romero 2021 — 외회전 강화가 RC 건병변 통증·기능 개선</div></div></div>
+  </div>
+</div>
+
+<div class="page" id="page-thoracic">
+  <div class="ph"><div class="bc">체형 교정</div><h2>흉추후만 (Thoracic Kyphosis)</h2><p>흉추 과후만은 어깨충돌·경추통·요추 보상만곡의 근본 원인. 흉추 가동성 회복이 1순위입니다.</p></div>
+  <div class="al al-b"><span></span><div><strong>근거</strong>Thoracic MT SR PMC 2025: 흉추 가동화·운동이 SIS 통증 VAS, ROM, DASH 유의미하게 개선. 흉추 신전이 견봉하 공간 즉각적 증가.</div></div>
+  <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">흉추 폼롤러 신전 (T4-T8)</div><div class="ec-meta">각 구역 60초</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tg">초급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">T4→T6→T8 순서</span></div><div class="ec-point">폼롤러를 흉추 아래에 놓고 천천히 신전합니다. 양손을 머리 뒤에 받칩니다.</div><div class="ec-ref">Thoracic MT SR PMC 2025 — 흉추 가동화가 즉각적 ROM·통증 개선</div></div></div>
+  <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">Thread-the-Needle (흉추 회전)</div><div class="ec-meta">3세트 × 10회/측</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tg">초급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">3세트 × 10회/측</span></div><div class="ec-point">네발기기에서 한 팔을 반대편 아래로 통과시키며 흉추를 회전합니다.</div><div class="ec-ref">Sepehri 2024 BMC — 흉추 운동 포함 복합 프로그램이 후만각 교정에 유의미</div></div></div>
+  <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">슈퍼맨 (Superman Extension)</div><div class="ec-meta">3세트 × 12회 × 3초</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag to">중급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">3세트 × 12회 × 3초 유지</span></div><div class="ec-point">엎드려 양팔·양다리를 동시에 들어올려 3초 유지합니다.</div><div class="ec-ref">Niederer 2020 PLoS ONE — 척추 신근 강화가 흉·요추 자세 장기 개선</div></div></div>
+  <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">페이스 풀 (Face Pull)</div><div class="ec-meta">3세트 × 15회</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag to">중급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">밴드·케이블 · 얼굴 높이</span></div><div class="ec-point">얼굴 높이 밴드를 양손으로 당기며 외회전합니다. 팔꿈치를 어깨보다 높게 유지합니다.</div><div class="ec-ref">흉추후만+라운드숄더 복합 교정 운동으로 임상 권고</div></div></div>
+</div>
+
+<div class="page" id="page-scoliosis">
+  <div class="ph"><div class="bc">체형 교정</div><h2>척추측만 (Idiopathic Scoliosis) — Schroth Method</h2><p>Cobb angle 10–40°: Schroth + 코어 안정화. 40° 이상: 정형외과 의뢰 필수.</p></div>
+  <div class="al al-r"><span></span><div><strong>의뢰</strong>Cobb's angle &gt;40° / 성장기 급격한 진행 → 정형외과. 25–40°: 보조기+운동 병행.</div></div>
+  <div class="al al-b"><span></span><div><strong>근거</strong>Park & So Healthcare (2022, n=60): 12주 Schroth — Cobb angle -6.85° (p&lt;0.001). Frontiers Sports 2024 Meta-analysis: Schroth가 Cobb angle, ATR, 폐기능 유의미하게 개선. SOSORT 2016: Schroth+SEAS가 1차 운동치료.</div></div>
+  <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">Schroth 회전 호흡</div><div class="ec-meta">3세트 × 5회 · 흉곽 팽창</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag to">중급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">3세트 × 5회</span><span class="ec-chip">전문가 지도 필수</span></div><div class="ec-point">교정 자세에서 함몰된 쪽 흉곽으로 최대한 호흡 팽창합니다.</div><div class="ec-ref">Dimitrijević 2024 Frontiers — Schroth가 Cobb angle, ATR, 폐기능 유의미 개선</div><div class="ec-warn">Schroth Method는 숙련된 치료사의 초기 평가·처방이 반드시 필요합니다.</div></div></div>
+  <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">버드독 (오목측 우선 강화)</div><div class="ec-meta">3세트 × 8회/측</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag to">중급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">오목측 다리 우선</span></div><div class="ec-point">오목측 약화 근육을 선택적으로 강화합니다. 척추 중립이 핵심입니다.</div><div class="ec-ref">SOSORT 2016 — 코어 안정화 운동이 측만 진행 억제에 권고</div></div></div>
+</div>
+
+<div class="page" id="page-apt">
+  <div class="ph"><div class="bc">체형 교정</div><h2>골반 전방경사 (APT) — 하부교차증후군</h2><p>장요근·대퇴직근 단축 + 대둔근·복횡근 억제. 요통·외반슬·PFPS의 근본 원인입니다.</p></div>
+  <div class="al al-b"><span></span><div><strong>근거</strong>Niederer et al. PLoS ONE 2020 SR: MCE가 만성 요통 통증·기능 장기 개선. Pelvic biomechanics review MDPI 2024: 골반 전방경사→대퇴 내회전→외반슬 연쇄 기전 확인.</div></div>
+  <div class="chain">
+    <div class="cn" style="background:var(--yd);color:var(--y)">APT</div><span class="ca">→</span><div class="cn" style="background:var(--od);color:var(--o)">요추 과전만·요통</div><span class="ca">+</span><div class="cn" style="background:var(--od);color:var(--o)">대퇴 내회전</div><span class="ca">→</span><div class="cn" style="background:var(--rd);color:var(--r)">외반슬·PFPS</div>
+  </div>
+  <div class="ptabs">
+    <button class="ptab active" onclick="pp('apt','p1',this)">1단계 · 이완</button>
+    <button class="ptab" onclick="pp('apt','p2',this)">2단계 · 안정화</button>
+    <button class="ptab" onclick="pp('apt','p3',this)">3단계 · 강화</button>
+  </div>
+  <div class="pp active" id="apt-p1">
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">장요근 스트레칭 (저자세 런지)</div><div class="ec-meta">3세트 × 30초/측</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tg">초급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">3세트 × 30초/측</span></div><div class="ec-point">낮은 런지에서 앞발에 중심, 뒤 고관절을 앞으로 밀어 장요근을 이완합니다.</div><div class="ec-ref">JOSPT 안정화 연구 — 장요근 이완이 APT 교정의 필수 선행 조건</div></div></div>
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">대퇴직근 스트레칭</div><div class="ec-meta">3세트 × 30초/측</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tg">초급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">3세트 × 30초/측</span></div><div class="ec-point">서서 무릎을 굽혀 발목을 뒤로 잡습니다. 골반을 후방 경사시켜 더 늘어나게 합니다.</div><div class="ec-ref">APT 재활 — 고관절 굴곡근 유연성이 골반 경사 교정의 전제 조건</div></div></div>
+  </div>
+  <div class="pp" id="apt-p2">
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">복횡근 드로우인</div><div class="ec-meta">3세트 × 10초 × 10회</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tg">초급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">숨 참지 않기</span></div><div class="ec-point">배꼽을 당기며 복횡근 단독 활성화합니다.</div><div class="ec-ref">McGill — 복횡근 선택적 활성화가 요추 분절 안정화 핵심</div></div></div>
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">데드버그 (Dead Bug)</div><div class="ec-meta">3세트 × 8회/측</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag to">중급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">요추 바닥 밀착 필수</span></div><div class="ec-point">반대편 팔·다리를 뻗으며 요추가 바닥에서 떨어지지 않게 유지합니다.</div><div class="ec-ref">Niederer 2020 — MCE가 요통·기능 장기 개선</div></div></div>
+  </div>
+  <div class="pp" id="apt-p3">
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">힙 브릿지 (골반 후방경사 강조)</div><div class="ec-meta">3세트 × 15회</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tg">초급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">최고점에서 배꼽 당기기</span></div><div class="ec-point">브릿지 최고점에서 골반을 후방 경사시켜 2초 유지합니다.</div><div class="ec-ref">J Athl Train — 대둔근이 골반 후방 안정화 1차 근육</div></div></div>
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">버드독</div><div class="ec-meta">3세트 × 8회/측</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag to">중급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">골반 수평 유지 핵심</span></div><div class="ec-point">네발기기에서 반대편 팔·다리. 골반이 기울어지지 않게 합니다.</div><div class="ec-ref">McGill 2015 — Bird Dog이 다열근 강화 최적 운동</div></div></div>
+  </div>
+</div>
+
+<!-- 간략 체형 페이지들 -->
+<div class="page" id="page-ppt">
+  <div class="ph"><div class="bc">체형 교정</div><h2>골반 후방경사 (PPT) — 편평등</h2><p>햄스트링 단축·복직근 과활성으로 요추 전만 소실. 추간판 전방 압박·요통 유발.</p></div>
+  <div class="al al-b"><span></span><div><strong>근거</strong>McKenzie 요추 신전 운동 Cochrane 리뷰 — 요추 신전 운동이 후방경사형 요통 단기 통증·기능 개선.</div></div>
+  <div class="tbl-wrap"><table class="tbl"><tr><th>상태</th><th>근육</th></tr><tr><td>과활성·단축</td><td>햄스트링, 복직근, 대둔근</td></tr><tr><td>억제·약화</td><td>장요근, 대퇴직근, 요추 기립근</td></tr></table></div>
+  <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">햄스트링 스트레칭</div><div class="ec-meta">3세트 × 30초/측</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tg">초급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">척추 중립 유지</span></div><div class="ec-point">앉아서 척추를 곧게 세우고 앞으로 기울입니다.</div><div class="ec-ref">JOSPT — 햄스트링 유연성이 PPT 교정 전제 조건</div></div></div>
+  <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">맥켄지 요추 신전 (Prone Press-up)</div><div class="ec-meta">3세트 × 10회</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag to">중급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">요추 전만 서서히 회복</span></div><div class="ec-point">엎드려 팔꿈치로 지지하며 상체를 들어올립니다.</div><div class="ec-ref">McKenzie Cochrane — 요추 신전 운동이 PPT형 요통 개선</div></div></div>
+</div>
+
+<div class="page" id="page-lpelvic">
+  <div class="ph"><div class="bc">체형 교정</div><h2>골반 측방경사 (Lateral Pelvic Tilt)</h2><p>중둔근 약화·다리길이 차이·측만이 원인. Trendelenburg 보행·ITBS·경추 보상 유발.</p></div>
+  <div class="al al-b"><span></span><div><strong>근거</strong>Effectiveness of pelvic stabilization exercises PMC 2025: 골반 안정화 운동이 동적 외반슬·중둔근 근력 유의미하게 개선.</div></div>
+  <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">사이드 라잉 힙 어브덕션 (약화측 우선)</div><div class="ec-meta">3세트 × 15회/측</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tg">초급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">약화측 우선 강화</span></div><div class="ec-point">약화된 쪽 중둔근을 집중 강화합니다.</div><div class="ec-ref">PMC 2025 — 골반 안정화 운동이 중둔근 근력 유의미하게 개선</div></div></div>
+  <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">Trendelenburg 교정 (단발 균형)</div><div class="ec-meta">3세트 × 30초/측</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag to">중급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">약화측 한 발 서기</span></div><div class="ec-point">약화측 한 발 서기로 반대 골반이 내려가지 않도록 중둔근을 수축합니다.</div><div class="ec-ref">PMC 2025 — 한 발 훈련이 FPPA 유의미하게 개선</div></div></div>
+</div>
+
+<div class="page" id="page-valgus">
+  <div class="ph"><div class="bc">체형 교정</div><h2>외반슬 (Genu Valgum) — 원인 감별 필수</h2><p>X자 다리. 골반형·대퇴골 회전형·족부 회내형·구조적인지 먼저 감별합니다.</p></div>
+  <div class="al al-b"><span></span><div><strong>근거</strong>PMC 2025 Exercise Modalities SR: 족부 회내→대퇴 내회전→외반슬 연쇄. PMC 2025 Pelvic stabilization (n=46): 골반 안정화 후 중둔근 근력·FPPA 유의미하게 개선.</div></div>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>원인</th><th>감별 포인트</th><th>재활 타겟</th></tr>
+    <tr><td>골반 전방경사형</td><td>APT 동반, 요추 과전만</td><td>대둔근+장요근 이완</td></tr>
+    <tr><td>대퇴골 과내회전형</td><td>Craig's Test 양성</td><td>고관절 외회전근 강화</td></tr>
+    <tr><td>족부 과회내형</td><td>아치 소실, 종골 외반</td><td>족부 아치 강화+인솔</td></tr>
+    <tr><td>중둔근 약화형</td><td>SLS 시 골반 하강</td><td>중둔근 강화</td></tr>
+  </table></div>
+  <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">클램쉘 (밴드)</div><div class="ec-meta">3세트 × 15회</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tg">초급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">골반 고정 핵심</span></div><div class="ec-point">옆으로 누워 무릎 45°, 발은 붙이고 위쪽 무릎을 벌립니다.</div><div class="ec-ref">PMC 2025 — 중둔근 강화 후 동적 외반 각도 유의미하게 개선</div></div></div>
+  <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">싱글 레그 스쿼트 (정렬 교정)</div><div class="ec-meta">3세트 × 8회/측</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tr">고급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">거울 피드백 필수</span><span class="ec-chip">2–5지 방향 유지</span></div><div class="ec-point">한 발 스쿼트 시 무릎이 2–5지 방향 향하도록 의식적으로 조절합니다.</div><div class="ec-ref">PMC 2025 SR — FPPA 개선이 중둔근 강화 효과를 직접 반영</div></div></div>
+</div>
+
+<div class="page" id="page-varus">
+  <div class="ph"><div class="bc">체형 교정</div><h2>내반슬 (Genu Varum) — O자 다리</h2><p>내측 무릎 하중 집중으로 내측 반월판·OA·거위발 건염 위험 증가.</p></div>
+  <div class="al al-b"><span></span><div><strong>근거</strong>Moon et al. Healthcare 2023 RCT (n=36): 복합 운동(대퇴사두근+골반 안정화)이 HKA angle, 무릎 통증 유의미하게 개선.</div></div>
+  <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">Leg Press + 외회전 부하</div><div class="ec-meta">4세트 × 10회</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag to">중급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">발 외회전 유지</span></div><div class="ec-point">레그프레스 시 발을 약간 외회전 유지합니다.</div><div class="ec-ref">Moon et al. 2023 — 복합 운동이 HKA angle·통증 유의미 개선</div></div></div>
+  <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">외측 쐐기 인솔</div><div class="ec-meta">보조기 · 내측 하중 분산</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tb">보조</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">외측 높임</span></div><div class="ec-point">외측 쐐기 인솔로 내측 하중을 외측으로 분산합니다.</div><div class="ec-ref">RCT PMC 2025 — 인솔+운동이 인솔 단독보다 균형·통증 유의미 개선</div></div></div>
+</div>
+
+<div class="page" id="page-recurvatum">
+  <div class="ph"><div class="bc">체형 교정</div><h2>백니 (Genu Recurvatum) — 무릎 과신전</h2><p>햄스트링 약화·종아리 단축·고유수용감각 저하가 원인. ACL·전방관절낭에 만성 부하.</p></div>
+  <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">종아리 스트레칭 (벽 밀기)</div><div class="ec-meta">3세트 × 30초/측</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tg">초급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">비복근·가자미근</span></div><div class="ec-point">벽에 손을 짚고 뒷발을 뒤로 밀며 종아리를 스트레칭합니다.</div><div class="ec-ref">발목 배측굴곡 제한이 무릎 과신전 보상의 주요 원인 (생체역학 연구)</div></div></div>
+  <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">노르딕 햄스트링 컬 (편심성)</div><div class="ec-meta">3세트 × 5–8회</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tr">고급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">발 고정 필요</span></div><div class="ec-point">발을 고정하고 천천히 앞으로 쓰러집니다. 편심성 구간이 핵심입니다.</div><div class="ec-ref">BJSM 2019 — 노르딕 컬이 햄스트링 기능 강화 최고 수준 근거</div></div></div>
+  <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">무릎 5–10° 굴곡 자세 훈련</div><div class="ec-meta">상시 적용</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tb">보조</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">거울 피드백</span></div><div class="ec-point">서 있을 때 무릎을 완전히 펴지 않고 5–10° 굴곡을 유지하는 습관을 만듭니다.</div><div class="ec-ref">임상 권고 — 무릎 중립 자세 유지가 ACL·전방관절낭 만성 부하 감소 핵심</div></div></div>
+</div>
+
+<div class="page" id="page-hallux">
+  <div class="ph"><div class="bc">체형 교정</div><h2>무지외반 (Hallux Valgus)</h2><p>족부 내재근 약화·편평족이 원인. HVA 25° 미만에서 보존치료 효과적. 40° 이상은 수술 평가.</p></div>
+  <div class="al al-r"><span></span><div><strong>의뢰</strong>HVA &gt;40° 또는 6개월 보존치료 실패 → 정형외과 수술 평가.</div></div>
+  <div class="chain"><div class="cn" style="background:var(--rd);color:var(--r)">무지외반</div><span class="ca">→</span><div class="cn" style="background:var(--od);color:var(--o)">족부 회내↑</div><span class="ca">→</span><div class="cn" style="background:var(--od);color:var(--o)">경골·대퇴 내회전</div><span class="ca">→</span><div class="cn" style="background:var(--rd);color:var(--r)">ITBS·외반슬</div></div>
+  <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div class="ec-ic">HAL</div><div><div class="ec-name">타월 발가락 컬</div><div class="ec-meta">3세트 × 20회 · 족부 내재근</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tg">초급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">맨발·수건 위</span></div><div class="ec-point">발가락으로 수건을 집어올립니다.</div><div class="ec-ref">무지외반 보존치료 — 족부 내재근 강화가 경도 교정 효과</div></div></div>
+  <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">Short Foot Exercise (아치 강화)</div><div class="ec-meta">3세트 × 10초 × 10회</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag to">중급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">발뒤꿈치·발볼 유지</span></div><div class="ec-point">발뒤꿈치와 발볼을 유지하며 아치를 들어올립니다.</div><div class="ec-ref">Short Foot Exercise — 족부 내재근 강화로 아치 회복 및 무지외반 교정</div></div></div>
+</div>
+
+<!-- 무릎 재활 -->
+<div class="page" id="page-pfps">
+  <div class="ph"><div class="bc">무릎 재활</div><h2>앞무릎 통증 (PFPS) — 슬개대퇴 통증 증후군</h2><p>AKP의 가장 흔한 원인. VMO 약화+둔근 약화+슬개골 트래킹 이상이 복합된 다요인 증후군입니다.</p></div>
+  <div class="al al-b"><span></span><div><strong>근거</strong>JOSPT 2019: 대퇴사두근 강화가 PFPS 표준. Am J Sports Med 2020: 0–30° 스쿼트가 슬개대퇴 스트레스 최소화. PMC 2025: 둔근 강화 후 동적 외반 유의미 개선.</div></div>
+  <div class="ptabs">
+    <button class="ptab active" onclick="pp('pfps','p1',this)">1단계 · 초기</button>
+    <button class="ptab" onclick="pp('pfps','p2',this)">2단계 · 강화</button>
+    <button class="ptab" onclick="pp('pfps','p3',this)">3단계 · 기능</button>
+  </div>
+  <div class="pp active" id="pfps-p1">
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div class="ec-ic">VAR</div><div><div class="ec-name">TKE (Terminal Knee Extension)</div><div class="ec-meta">3세트 × 15회 · VMO</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tg">초급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">마지막 10–15° 집중</span></div><div class="ec-point">무릎 뒤에 밴드를 걸고 완전 신전. 마지막 10–15° 구간에서 VMO를 강하게 수축합니다.</div><div class="ec-ref">Knee Surg 2021 — TKE가 VMO 선택적 강화 최적 운동</div></div></div>
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">SLR (Straight Leg Raise)</div><div class="ec-meta">3세트 × 15회</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tg">초급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">배측굴곡 동반</span></div><div class="ec-point">누워서 무릎 편 채 30° 들어올립니다. 발목을 당기면 VMO 더 효과적입니다.</div><div class="ec-ref">JOSPT 2019 — SLR이 초기 PFPS 표준 운동</div></div></div>
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">클램쉘 (PFPS 1순위)</div><div class="ec-meta">3세트 × 15회 · 중둔근</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tg">초급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">골반 고정 핵심</span></div><div class="ec-point">중둔근 강화가 PFPS 재활에서 가장 중요합니다. 무릎 정렬의 근본을 잡는 운동입니다.</div><div class="ec-ref">PMC 2025 — 중둔근 강화 후 동적 외반·PFPS 유의미 개선</div></div></div>
+  </div>
+  <div class="pp" id="pfps-p2">
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">미니 스쿼트 (0–30°)</div><div class="ec-meta">3세트 × 12회</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag to">중급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">30° 절대 넘지 않음</span><span class="ec-chip">Valgus 금지</span></div><div class="ec-point">30° 이내로만 스쿼트합니다. 슬개골 스트레스를 최소화하며 근력을 강화합니다.</div><div class="ec-ref">Am J Sports Med 2020 — 0–30° 스쿼트가 슬개대퇴 스트레스 최소화 확인</div></div></div>
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">스텝 다운 (Eccentric)</div><div class="ec-meta">3세트 × 10회/측</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag to">중급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">매우 천천히</span><span class="ec-chip">Valgus 절대 금지</span></div><div class="ec-point">낮은 계단에서 한 발로 발뒤꿈치를 천천히 내립니다.</div><div class="ec-ref">JOSPT 2022 — 계단 기능 개선 유의미한 효과</div></div></div>
+  </div>
+  <div class="pp" id="pfps-p3">
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">단일지지 균형 훈련</div><div class="ec-meta">3세트 × 30초/측</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tr">고급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">눈 감기 → 불안정면 진행</span></div><div class="ec-point">한 발 서기로 고유수용감각을 훈련합니다.</div><div class="ec-ref">BJSM 2020 — 재부상 위험 40% 감소</div></div></div>
+  </div>
+</div>
+
+<div class="page" id="page-medknee">
+  <div class="ph"><div class="bc">무릎 재활</div><h2>내측 무릎 통증 — 반월판·거위발·MCL</h2><p>내측 무릎 통증의 3대 원인 감별이 핵심. McMurray·Valgus Stress Test로 Red Flag 확인 우선.</p></div>
+  <div class="al al-r"><span></span><div><strong>즉시 의뢰</strong>McMurray (+) 클릭·잠김 → 반월판 파열 의뢰. Valgus Stress (+) → MCL 파열 의뢰.</div></div>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>진단</th><th>특징적 증상</th><th>핵심 테스트</th></tr>
+    <tr><td>반월상연골판 파열</td><td>쪼그림·회전 시 통증, 관절 걸림</td><td>McMurray Test</td></tr>
+    <tr><td>거위발 건염</td><td>내측 아래 국소 압통, 계단 내려갈 때</td><td>압통 검사, SLR</td></tr>
+    <tr><td>MCL 손상</td><td>외상 병력, 내측 날카로운 통증</td><td>Valgus Stress Test</td></tr>
+  </table></div>
+  <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">Heel Slide (ROM 확보)</div><div class="ec-meta">3세트 × 15회 · 초기</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tg">초급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">통증 없는 범위만</span></div><div class="ec-point">발뒤꿈치를 엉덩이 쪽으로 미끄러뜨립니다.</div><div class="ec-ref">반월판·MCL 초기 재활 표준 — 관절 부하 없는 ROM 확보</div></div></div>
+  <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">Quad Set + SLR</div><div class="ec-meta">등척성 → 거상 단계 진행</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tg">초급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">관절 부하 없음</span></div><div class="ec-point">무릎 편 채 대퇴사두근 등척성 수축, 이후 SLR로 진행합니다.</div><div class="ec-ref">내측 무릎 초기 재활 — 관절 부하 없이 근육 활성화</div></div></div>
+  <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">클램쉘 (거위발건염 핵심)</div><div class="ec-meta">3세트 × 15회</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tg">초급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">대퇴 내회전 교정</span></div><div class="ec-point">거위발 건염의 주원인인 고관절 외회전 기능 부전을 교정합니다.</div><div class="ec-ref">거위발건염 재활 — 고관절 외회전 강화가 1차 치료</div></div></div>
+</div>
+
+<div class="page" id="page-latknee">
+  <div class="ph"><div class="bc">무릎 재활</div><h2>외측 무릎 통증 — 장경인대증후군 (ITBS)</h2><p>달리기·자전거에서 외측 무릎 Burning 통증. 둔근 약화가 근본 원인. Ober's Test·Noble Compression Test로 감별.</p></div>
+  <div class="al al-b"><span></span><div><strong>근거</strong>JOSPT 2020 — 중둔근 강화+코어가 ITBS 치료 핵심. Ober's Test, Noble Compression Test로 감별 필수.</div></div>
+  <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">ITB 폼롤링</div><div class="ec-meta">90초/측 · 이완</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tg">초급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">외측 대퇴 전체</span><span class="ec-chip">외측 상과 직접 압박 금지</span></div><div class="ec-point">외측 허벅지를 롤링합니다. 외측 상과(무릎 바로 위 뼈)에는 직접 압박하지 않습니다.</div><div class="ec-ref">ITBS 재활 1단계 — ITB 이완이 마찰 감소의 선행 조건</div></div></div>
+  <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">Side Plank + 클램쉘 복합</div><div class="ec-meta">중둔근·코어 강화</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag to">중급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">ITBS 근본 원인 교정</span></div><div class="ec-point">둔근 약화가 ITBS의 근본 원인. 중둔근+코어 복합 강화가 핵심입니다.</div><div class="ec-ref">JOSPT 2020 — 중둔근 강화가 ITBS 재활의 핵심</div></div></div>
+</div>
+
+<div class="page" id="page-postknee">
+  <div class="ph"><div class="bc">무릎 재활</div><h2>후방 무릎 — PCL·베이커낭종</h2><p>PCL 손상은 대퇴사두근 강화가 핵심. 베이커 낭종은 원인 관절 질환 치료가 우선. 깊은 굴곡(90° 이상)·햄스트링 과부하 금지.</p></div>
+  <div class="al al-r"><span></span><div><strong>의뢰</strong>Posterior Drawer (+) → PCL 파열 의뢰. 깊은 굴곡(90° 이상)·햄스트링 과부하 절대 금지.</div></div>
+  <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">Quad Set + SLR (PCL 핵심)</div><div class="ec-meta">등척성 → 거상 단계 진행</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tg">초급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">대퇴사두근 PCL 보조 역할</span></div><div class="ec-point">PCL 손실 시 대퇴사두근이 경골 후방 전위를 막는 역할을 합니다.</div><div class="ec-ref">PCL 재활 — 대퇴사두근 강화가 PCL 기능 보조의 핵심 기전</div></div></div>
+  <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">Standing TKE (경골 전방 안정화)</div><div class="ec-meta">3세트 × 15회</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag to">중급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">PCL 재활 특화</span></div><div class="ec-point">서서 밴드 저항으로 무릎을 완전 신전합니다. 경골의 전방 안정화를 훈련합니다.</div><div class="ec-ref">PCL 재활 — Standing TKE가 경골 전방 안정화 훈련</div></div></div>
+</div>
+
+<!-- 연쇄 지도 -->
+<div class="page" id="page-chain">
+  <div class="ph"><div class="bc">연쇄 패턴</div><h2>체형 → 통증 연쇄 지도 (Kinetic Chain)</h2><p>체형 이상은 단독으로 존재하지 않습니다. 연쇄를 이해해야 통증의 진짜 원인을 찾을 수 있습니다.</p></div>
+  <div class="st">상부 연쇄</div>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>체형 이상</th><th>직접 유발</th><th>연쇄 유발</th></tr>
+    <tr><td>두부전방 (FHP)</td><td>경추성 두통·경추 디스크 압박</td><td>흉추후만 악화 → 극상근 충돌</td></tr>
+    <tr><td>라운드숄더</td><td>견봉하 공간↓ → 극상근 건염</td><td>회전근개 파열·이두근 건염</td></tr>
+    <tr><td>라운드숄더 + TOS</td><td>사각근·소흉근 단축</td><td>상완신경총 압박 → 소지·약지 저림</td></tr>
+    <tr><td>흉추후만</td><td>요추 과전만 보상</td><td>요통·경추통</td></tr>
+    <tr><td>척추측만</td><td>비대칭 요통</td><td>골반 측방경사·발목 보상</td></tr>
+  </table></div>
+  <div class="st">하부 연쇄</div>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>체형 이상</th><th>직접 유발</th><th>연쇄 유발</th></tr>
+    <tr><td>골반 전방경사</td><td>요추 과전만 → 요통</td><td>대퇴 내회전 → 외반슬 → PFPS</td></tr>
+    <tr><td>골반 후방경사</td><td>요추 편평등 → 추간판 전방 압박</td><td>고관절 신전 제한 → 무릎 과부하</td></tr>
+    <tr><td>골반 측방경사</td><td>ITBS·이상근 증후군</td><td>경추 측방 보상 → 사경</td></tr>
+    <tr><td>외반슬</td><td>PFPS·내측 반월판 과부하</td><td>족부 회내 → 족저근막염</td></tr>
+    <tr><td>내반슬</td><td>내측 무릎 OA·거위발 건염</td><td>요추 측만 보상</td></tr>
+    <tr><td>무지외반</td><td>족저근막염·중족골통</td><td>족부 회내 → 외반슬 → ITBS</td></tr>
+  </table></div>
+  <div class="st">4대 핵심 시나리오</div>
+  <div class="acc">
+    <div class="acc-item"><div class="acc-h" onclick="ta(this)"><div class="acc-l"><div class="acc-n">①</div><div><div class="acc-title">라운드숄더 → 극상근 충돌 → 회전근개 파열</div></div></div><span class="acc-arr">▾</span></div><div class="acc-b"><div class="chain" style="margin-top:10px"><div class="cn" style="background:var(--pud);color:var(--pu)">흉추후만</div><span class="ca">→</span><div class="cn" style="background:var(--od);color:var(--o)">라운드숄더</div><span class="ca">→</span><div class="cn" style="background:var(--rd);color:var(--r)">견봉하↓ → 극상근 충돌</div><span class="ca">→</span><div class="cn" style="background:var(--rd);color:var(--r)">RC 파열</div></div><div class="al al-g" style="margin-top:8px"><span></span><div>재활 순서: 흉추 가동성 → 소흉근 이완 → 하부승모근·전거근 강화 → 외회전근 강화</div></div></div></div>
+    <div class="acc-item"><div class="acc-h" onclick="ta(this)"><div class="acc-l"><div class="acc-n">②</div><div><div class="acc-title">APT → 대퇴 내회전 → 외반슬 → PFPS</div></div></div><span class="acc-arr">▾</span></div><div class="acc-b"><div class="chain" style="margin-top:10px"><div class="cn" style="background:var(--yd);color:var(--y)">APT+대둔근 약화</div><span class="ca">→</span><div class="cn" style="background:var(--od);color:var(--o)">대퇴 내회전</div><span class="ca">→</span><div class="cn" style="background:var(--od);color:var(--o)">외반슬</div><span class="ca">→</span><div class="cn" style="background:var(--rd);color:var(--r)">PFPS</div></div><div class="al al-g" style="margin-top:8px"><span></span><div>재활 순서: 장요근·TFL 이완 → 대둔근·중둔근 강화 → 복횡근 안정화 → 기능 정렬 훈련</div></div></div></div>
+    <div class="acc-item"><div class="acc-h" onclick="ta(this)"><div class="acc-l"><div class="acc-n">③</div><div><div class="acc-title">라운드숄더 → TOS → 소지·약지 저림</div></div></div><span class="acc-arr">▾</span></div><div class="acc-b"><div class="chain" style="margin-top:10px"><div class="cn" style="background:var(--pud);color:var(--pu)">라운드숄더</div><span class="ca">→</span><div class="cn" style="background:var(--od);color:var(--o)">사각근·소흉근 단축</div><span class="ca">→</span><div class="cn" style="background:var(--rd);color:var(--r)">상완신경총 압박 (TOS)</div><span class="ca">→</span><div class="cn" style="background:var(--rd);color:var(--r)">소지·약지 저림</div></div><div class="al al-g" style="margin-top:8px"><span></span><div>재활 순서: 사각근·소흉근 이완 → 흉추 가동화 → 상완신경총 활강 → 자세 교정</div></div></div></div>
+    <div class="acc-item"><div class="acc-h" onclick="ta(this)"><div class="acc-l"><div class="acc-n">④</div><div><div class="acc-title">무지외반 → 족부 회내 → 외반슬 → ITBS</div></div></div><span class="acc-arr">▾</span></div><div class="acc-b"><div class="chain" style="margin-top:10px"><div class="cn" style="background:var(--rd);color:var(--r)">무지외반</div><span class="ca">→</span><div class="cn" style="background:var(--od);color:var(--o)">족부 회내</div><span class="ca">→</span><div class="cn" style="background:var(--od);color:var(--o)">경골·대퇴 내회전</div><span class="ca">→</span><div class="cn" style="background:var(--rd);color:var(--r)">ITBS·외반슬</div></div><div class="al al-g" style="margin-top:8px"><span></span><div>재활 순서: Short Foot Exercise → 무지외전근 강화 → 인솔 보조기 → 중둔근 강화</div></div></div></div>
+  </div>
+</div>
+
+<!-- 논문 검색 -->
+<div class="page" id="page-pubmed">
+  <div class="ph"><div class="bc">논문 검색</div><h2>근거 논문 검색 — 4개 데이터베이스</h2><p>PubMed · PEDro · JOSPT · Cochrane에서 직접 검색합니다. 전문가 배포용 앱의 근거 확인에 사용하세요.</p></div>
+  <div class="al al-b" style="margin-bottom:16px"><span></span><div>키워드 입력 후 버튼을 누르거나 Enter를 치면 해당 데이터베이스로 바로 이동합니다.</div></div>
+  <div class="st">PubMed (NLM) — 가장 포괄적 의학 데이터베이스</div>
+  <div class="sw"><input class="si" id="pm-q" type="text" placeholder="lumbar disc herniation exercise RCT" onkeydown="if(event.key==='Enter')sdb('pubmed')"><button class="sb2" onclick="sdb('pubmed')">PubMed →</button></div>
+  <div class="st">PEDro — 물리치료 RCT 품질 평가</div>
+  <div class="sw"><input class="si" id="pe-q" type="text" placeholder="rotator cuff exercise" onkeydown="if(event.key==='Enter')sdb('pedro')"><button class="sb2" onclick="sdb('pedro')">PEDro →</button></div>
+  <div class="st">JOSPT — 정형외과·스포츠 물리치료 저널</div>
+  <div class="sw"><input class="si" id="jo-q" type="text" placeholder="anterior pelvic tilt low back pain" onkeydown="if(event.key==='Enter')sdb('jospt')"><button class="sb2" onclick="sdb('jospt')">JOSPT →</button></div>
+  <div class="st">Cochrane Library — 체계적 문헌고찰 전문</div>
+  <div class="sw"><input class="si" id="co-q" type="text" placeholder="scoliosis Schroth exercise" onkeydown="if(event.key==='Enter')sdb('cochrane')"><button class="sb2" onclick="sdb('cochrane')">Cochrane →</button></div>
+  <hr class="dv">
+  <div class="st">자주 쓰는 검색 링크</div>
+  <div class="sl">
+    <a class="slk" href="https://pubmed.ncbi.nlm.nih.gov/?term=lumbar+disc+herniation+exercise+RCT" target="_blank">허리디스크 RCT</a>
+    <a class="slk" href="https://pubmed.ncbi.nlm.nih.gov/?term=rotator+cuff+tear+conservative+rehabilitation" target="_blank">회전근개 파열 보존</a>
+    <a class="slk" href="https://pubmed.ncbi.nlm.nih.gov/?term=adhesive+capsulitis+exercise+therapy" target="_blank">오십견 운동치료</a>
+    <a class="slk" href="https://pubmed.ncbi.nlm.nih.gov/?term=carpal+tunnel+syndrome+nerve+gliding" target="_blank">수근관증후군</a>
+    <a class="slk" href="https://pubmed.ncbi.nlm.nih.gov/?term=thoracic+outlet+syndrome+rehabilitation" target="_blank">흉곽출구증후군</a>
+    <a class="slk" href="https://pubmed.ncbi.nlm.nih.gov/?term=rounded+shoulder+subacromial+impingement+RCT" target="_blank">라운드숄더→충돌</a>
+    <a class="slk" href="https://pubmed.ncbi.nlm.nih.gov/?term=anterior+pelvic+tilt+low+back+pain+exercise" target="_blank">APT 요통</a>
+    <a class="slk" href="https://pubmed.ncbi.nlm.nih.gov/?term=genu+valgum+hip+strengthening+exercise" target="_blank">외반슬 둔근</a>
+    <a class="slk" href="https://pubmed.ncbi.nlm.nih.gov/?term=scoliosis+Schroth+exercise+RCT" target="_blank">척추측만 Schroth</a>
+    <a class="slk" href="https://pubmed.ncbi.nlm.nih.gov/?term=hallux+valgus+conservative+exercise" target="_blank">무지외반 보존</a>
+    <a class="slk" href="https://pubmed.ncbi.nlm.nih.gov/?term=patellofemoral+pain+syndrome+gluteus+strengthening" target="_blank">PFPS 둔근</a>
+    <a class="slk" href="https://pubmed.ncbi.nlm.nih.gov/?term=cervical+radiculopathy+exercise+conservative" target="_blank">경추 신경근병증</a>
+    <a class="slk" href="https://pubmed.ncbi.nlm.nih.gov/?term=genu+recurvatum+hamstring+rehabilitation" target="_blank">백니 햄스트링</a>
+    <a class="slk" href="https://www.pedro.org.au/english/search/" target="_blank">PEDro 바로가기</a>
+    <a class="slk" href="https://www.jospt.org/search" target="_blank">JOSPT 바로가기</a>
+    <a class="slk" href="https://www.cochranelibrary.com/search" target="_blank">Cochrane 바로가기</a>
+  </div>
+</div>
+
+
+<!-- 발목 재활 -->
+<div class="page" id="page-ankle">
+  <div class="ph"><div class="bc">발목 재활</div><h2>발목 재활 — 염좌 & 아킬레스건염</h2><p>발목 염좌는 외측 인대 손상이 95%. 아킬레스건염은 과사용·비복근 단축이 원인. 고유수용감각 회복이 재발 방지의 핵심입니다.</p></div>
+  <div class="al al-r"><span>의뢰</span><div><strong>즉시 의뢰</strong>Ottawa 규칙 양성 (복숭아뼈 압통 + 체중부하 불가) → 골절 X-ray 필수. 완전 아킬레스건 파열 (Thompson Test 양성) → 정형외과 즉시 의뢰.</div></div>
+  <div class="al al-b"><span>근거</span><div><strong>논문 근거</strong>Doherty et al. BJSM (2017) Systematic Review: 균형 훈련이 발목 염좌 재발률 35% 감소. Alfredson Protocol (1998): 편심성 종아리 강화가 아킬레스건염 표준 치료. van den Bekerom et al. (2012): PRICE 프로토콜이 급성 염좌 표준.</div></div>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>진단</th><th>특징</th><th>핵심 테스트</th><th>재활 방향</th></tr>
+    <tr><td>외측 인대 염좌 (ATFL)</td><td>발목 외측 통증·부종, 내번 외상 병력</td><td>전방 서랍 검사, 내번 스트레스</td><td>PRICE → 균형 훈련 → 기능 복귀</td></tr>
+    <tr><td>아킬레스건염</td><td>뒤꿈치 위 통증, 아침 뻣뻣함, 달리기 악화</td><td>Royal London Hospital Test</td><td>편심성 종아리 강화 (Alfredson)</td></tr>
+    <tr><td>족저근막염</td><td>아침 첫 발걸음 통증, 종골 내측 압통</td><td>Windlass Test</td><td>종아리·족저 스트레칭 + 아치 강화</td></tr>
+  </table></div>
+  <div class="ptabs">
+    <button class="ptab active" onclick="pp('ankle','p1',this)">1단계 · 급성기</button>
+    <button class="ptab" onclick="pp('ankle','p2',this)">2단계 · 근력 회복</button>
+    <button class="ptab" onclick="pp('ankle','p3',this)">3단계 · 고유수용감각</button>
+  </div>
+  <div class="pp active" id="ankle-p1">
+    <div class="al al-o"><strong>급성기 원칙 (0–3일)</strong>PRICE: Protection 보호, Rest 휴식, Ice 냉각, Compression 압박, Elevation 거상. 48시간 후 조기 가동을 시작합니다.</div>
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">발목 알파벳 쓰기</div><div class="ec-meta">3세트 × 1회 · 초기 가동성</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tg">초급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">3세트</span><span class="ec-chip">통증 없는 범위만</span></div><div class="ec-point">발로 공중에 알파벳을 그립니다. 초기 관절 가동성 회복과 부종 감소에 효과적입니다.</div><div class="ec-ref">BJSM 2022 — 발목 염좌 초기 재활 표준 운동</div></div></div>
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">발목 4방향 능동 운동 (AROM)</div><div class="ec-meta">3세트 × 15회/방향</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tg">초급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">배측굴곡·저측굴곡·내번·외번</span></div><div class="ec-point">앉아서 발목을 4방향으로 천천히 움직입니다. 관절 영양 공급과 부종 감소를 돕습니다.</div><div class="ec-ref">van den Bekerom 2012 — 조기 가동화가 안정 치료보다 빠른 회복</div></div></div>
+  </div>
+  <div class="pp" id="ankle-p2">
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">까치발 올리기 (Calf Raise)</div><div class="ec-meta">3세트 × 15회 · 비복근·가자미근</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tg">초급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">양발 → 한 발 진행</span></div><div class="ec-point">발끝으로 천천히 올라갔다 내려옵니다. 양발로 시작해 한 발로 진행합니다.</div><div class="ec-ref">JOSPT — 비복근·가자미근 강화가 발목 안정성 회복 핵심</div></div></div>
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">편심성 까치발 (Alfredson Protocol)</div><div class="ec-meta">3세트 × 15회 · 아킬레스건염 표준</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag to">중급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">3세트 × 15회 × 2회/일</span><span class="ec-chip">아킬레스건염 전용</span><span class="ec-chip">무릎 펴기 + 굽히기 각각</span></div><div class="ec-point">계단 끝에 발볼을 걸치고 건강한 발로 올라간 후, 아픈 발만으로 천천히 내려옵니다. 통증이 있어도 중등도(5/10) 이하면 계속 진행합니다.</div><div class="ec-desc">Alfredson Protocol: 무릎 신전·굴곡 각각 3세트 × 15회, 하루 2번, 12주. 아킬레스건 콜라겐 합성을 자극합니다.</div><div class="ec-ref">Alfredson et al. AJSM 1998 — 편심성 운동이 아킬레스건염 표준 치료 (Grade A)</div><div class="ec-warn">아킬레스건 완전 파열 시 절대 금지. Thompson Test로 확인 필수.</div></div></div>
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">밴드 외번 저항 운동</div><div class="ec-meta">3세트 × 15회 · 비골근 강화</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag to">중급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">외측 인대 보조근 강화</span></div><div class="ec-point">밴드로 저항을 주며 발목을 외번합니다. 비골근 강화로 외측 인대를 보조합니다.</div><div class="ec-ref">BJSM 2017 — 비골근 강화가 발목 염좌 재발 방지에 핵심</div></div></div>
+  </div>
+  <div class="pp" id="ankle-p3">
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">단일지지 균형 훈련</div><div class="ec-meta">3세트 × 30초/측 · 고유수용감각</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag to">중급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">눈 감기 → 불안정면 순서로</span></div><div class="ec-point">한 발 서기로 시작해 눈 감기, 폼패드 위로 단계적으로 진행합니다.</div><div class="ec-ref">Doherty et al. BJSM 2017 SR — 균형 훈련이 발목 염좌 재발률 35% 감소</div></div></div>
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">Star Excursion Balance Test (SEBT) 훈련</div><div class="ec-meta">3세트 × 8회/방향 · 동적 균형</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tr">고급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">8방향 손 뻗기</span><span class="ec-chip">스포츠 복귀 기준 평가 겸용</span></div><div class="ec-point">한 발로 서서 반대발로 8방향으로 최대한 멀리 뻗습니다. 평가와 훈련을 동시에 할 수 있습니다.</div><div class="ec-ref">JOSPT 2021 — SEBT가 발목 기능 복귀 기준 지표</div></div></div>
+  </div>
+</div>
+
+<!-- 고관절 재활 -->
+<div class="page" id="page-hip">
+  <div class="ph"><div class="bc">고관절 재활</div><h2>고관절 재활 — FAI & 이상근증후군</h2><p>고관절 충돌증후군(FAI)과 이상근증후군은 엉덩이 깊숙한 통증이 공통. 좌골신경 압박 유무로 감별합니다.</p></div>
+  <div class="al al-r"><strong>의뢰</strong>FAI 구조적 변형 (Cam/Pincer) + 보존치료 실패 → 정형외과 관절경 평가. 좌골신경통이 하지로 방사 → 경추·요추 디스크 감별 필요.</div>
+  <div class="al al-b"><strong>논문 근거</strong>Wall et al. BJSM (2016): FAI 보존치료 — 고관절 외회전근·둔근 강화가 통증·기능 개선. Boyajian-O'Neill et al. J Am Osteopath Assoc (2008): 이상근증후군 — 스트레칭+둔근 강화가 보존치료 표준.</div>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>진단</th><th>특징</th><th>핵심 테스트</th></tr>
+    <tr><td>FAI (고관절 충돌)</td><td>고관절 굴곡+내회전 시 사타구니 통증. 앉기·계단 악화.</td><td>FADIR Test (굴곡+내전+내회전)</td></tr>
+    <tr><td>이상근 증후군</td><td>엉덩이 깊은 통증, 좌골신경 방향 저림. 오래 앉으면 악화.</td><td>FAIR Test, Pace Test</td></tr>
+    <tr><td>대전자 점액낭염</td><td>대전자 직접 압통, 옆으로 누울 때 통증.</td><td>대전자 직접 압통</td></tr>
+  </table></div>
+  <div class="ptabs">
+    <button class="ptab active" onclick="pp('hip','p1',this)">FAI 재활</button>
+    <button class="ptab" onclick="pp('hip','p2',this)">이상근증후군 재활</button>
+  </div>
+  <div class="pp active" id="hip-p1">
+    <div class="al al-o"><strong>FAI 주의</strong>굴곡 90° 이상 + 내회전 조합 동작 제한. 딥 스쿼트, 레그프레스 깊게 굽히기 금지.</div>
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">클램쉘 (고관절 외회전근)</div><div class="ec-meta">3세트 × 15회</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tg">초급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">FAI 핵심 운동</span></div><div class="ec-point">고관절 외회전근 강화로 충돌 각도를 줄입니다. FAI 재활의 가장 기본 운동입니다.</div><div class="ec-ref">Wall et al. BJSM 2016 — 고관절 외회전근 강화가 FAI 보존치료 핵심</div></div></div>
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">힙 브릿지 (대둔근 강화)</div><div class="ec-meta">3세트 × 15회</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tg">초급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">90° 이상 굴곡 금지</span></div><div class="ec-point">대둔근 강화로 고관절 안정성을 회복합니다. 무릎 굴곡 각도를 90° 이하로 유지합니다.</div><div class="ec-ref">Wall et al. BJSM 2016 — 둔근 강화가 FAI 기능 개선에 유의미</div></div></div>
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">사이드 라잉 힙 어브덕션</div><div class="ec-meta">3세트 × 12회/측</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag to">중급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">중둔근 강화</span></div><div class="ec-point">옆으로 누워 다리를 들어올립니다. 중둔근 강화로 고관절 외전 기능을 회복합니다.</div><div class="ec-ref">FAI 재활 가이드라인 — 중둔근 강화가 고관절 안정화에 필수</div></div></div>
+  </div>
+  <div class="pp" id="hip-p2">
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">이상근 스트레칭 (비둘기 자세)</div><div class="ec-meta">3세트 × 30초/측</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tg">초급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">3세트 × 30초/측</span><span class="ec-chip">이상근 직접 이완</span></div><div class="ec-point">한 발을 앞에 굽혀 놓고 반대 다리를 뒤로 뻗어 엉덩이 깊숙이 스트레칭합니다. 엉덩이 깊은 곳이 당겨야 합니다.</div><div class="ec-ref">Boyajian-O'Neill 2008 — 이상근 스트레칭이 보존치료 핵심</div></div></div>
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">앙와위 이상근 스트레칭 (4자 스트레칭)</div><div class="ec-meta">3세트 × 30초/측</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tg">초급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">누워서 안전하게</span></div><div class="ec-point">누워서 한 발을 반대쪽 무릎 위에 올리고 (4자 모양) 무릎을 가슴 쪽으로 당깁니다.</div><div class="ec-ref">이상근증후군 보존치료 — 4자 스트레칭이 접근하기 쉬운 표준 방법</div></div></div>
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">클램쉘 + 대둔근 강화</div><div class="ec-meta">3세트 × 15회</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag to">중급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">이상근 과부하 방지</span></div><div class="ec-point">대둔근·중둔근이 강화되면 이상근의 보상적 과부하가 줄어듭니다.</div><div class="ec-ref">Boyajian-O'Neill 2008 — 둔근 강화가 이상근 과활성 감소에 기여</div></div></div>
+  </div>
+</div>
+
+<!-- 팔꿈치 재활 -->
+<div class="page" id="page-elbow">
+  <div class="ph"><div class="bc">팔꿈치 재활</div><h2>팔꿈치 재활 — 테니스엘보 & 골프엘보</h2><p>외측 상과염(테니스엘보)과 내측 상과염(골프엘보)은 건병변(Tendinopathy). 편심성 부하 훈련이 치료의 핵심입니다.</p></div>
+  <div class="al al-b"><strong>논문 근거</strong>Bisset et al. BMJ (2006) RCT: 물리치료가 코르티코스테로이드 주사보다 장기 결과 우수. Coombes et al. Lancet (2013): 편심성 강화가 외측 상과염 표준 치료. Tyler et al. JOSPT (2010): 편심성 손목 신전 운동이 테니스엘보 통증 81% 감소.</div>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>진단</th><th>압통 위치</th><th>유발 동작</th><th>핵심 테스트</th></tr>
+    <tr><td>테니스엘보 (외측 상과염)</td><td>외측 상과 (팔꿈치 바깥)</td><td>손목 신전, 악수, 물건 들기</td><td>Cozen's Test, Mill's Test</td></tr>
+    <tr><td>골프엘보 (내측 상과염)</td><td>내측 상과 (팔꿈치 안쪽)</td><td>손목 굴곡, 악력, 투구 동작</td><td>내측 상과 직접 압통</td></tr>
+  </table></div>
+  <div class="ptabs">
+    <button class="ptab active" onclick="pp('elbow','p1',this)">1단계 · 이완 & 보호</button>
+    <button class="ptab" onclick="pp('elbow','p2',this)">2단계 · 편심성 강화</button>
+    <button class="ptab" onclick="pp('elbow','p3',this)">3단계 · 기능 복귀</button>
+  </div>
+  <div class="pp active" id="elbow-p1">
+    <div class="al al-o"><strong>초기 원칙</strong>통증 유발 반복 동작 제한. 테니스엘보 스트랩 착용으로 건 부착부 압박 분산. 아이싱 10–15분.</div>
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">손목 신전근 스트레칭 (테니스엘보)</div><div class="ec-meta">3세트 × 30초</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tg">초급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">팔꿈치 펴고 손목 굴곡</span></div><div class="ec-point">팔을 앞으로 뻗어 팔꿈치를 편 채로 반대손으로 손가락을 아래로 당겨 손목 신전근을 스트레칭합니다.</div><div class="ec-ref">테니스엘보 재활 지침 — 신전근 스트레칭이 초기 이완의 표준</div></div></div>
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">손목 굴곡근 스트레칭 (골프엘보)</div><div class="ec-meta">3세트 × 30초</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tg">초급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">팔꿈치 펴고 손목 신전</span></div><div class="ec-point">팔을 앞으로 뻗어 반대손으로 손가락을 위로 당겨 손목 굴곡근을 스트레칭합니다.</div><div class="ec-ref">내측 상과염 재활 — 굴곡근 스트레칭이 초기 이완의 표준</div></div></div>
+  </div>
+  <div class="pp" id="elbow-p2">
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">편심성 손목 신전 (테니스엘보 핵심)</div><div class="ec-meta">3세트 × 15회 · Tyler Protocol</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag to">중급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">3세트 × 15회</span><span class="ec-chip">건강한 손으로 올리고 아픈 손으로 천천히 내리기</span></div><div class="ec-point">건강한 손으로 아픈 손목을 신전 위치로 올린 후, 아픈 쪽 손만으로 천천히 3–5초에 걸쳐 굴곡으로 내립니다. 편심성 구간이 핵심입니다.</div><div class="ec-desc">건(Tendon) 콜라겐 합성을 자극하는 편심성 부하 원리. 통증이 중등도(5/10) 이하면 계속 진행합니다.</div><div class="ec-ref">Tyler et al. JOSPT 2010 — 편심성 손목 신전이 테니스엘보 통증 81% 감소</div></div></div>
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">편심성 손목 굴곡 (골프엘보 핵심)</div><div class="ec-meta">3세트 × 15회</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag to">중급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">건강한 손으로 올리고 천천히 내리기</span></div><div class="ec-point">건강한 손으로 손목을 굴곡 위치로 올린 후, 아픈 쪽만으로 천천히 신전으로 내립니다.</div><div class="ec-ref">내측 상과염 편심성 재활 — 테니스엘보와 동일 원리 적용</div></div></div>
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">악력 강화 (그립 강화)</div><div class="ec-meta">3세트 × 15회 · 전완 통합 강화</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag to">중급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">스트레스 볼·그립 강화기</span></div><div class="ec-point">스트레스 볼이나 그립 강화기를 사용합니다. 편심성 강화 후 점진적으로 진행합니다.</div><div class="ec-ref">Bisset et al. BMJ 2006 — 물리치료 포함 프로그램이 장기적으로 우수한 결과</div></div></div>
+  </div>
+  <div class="pp" id="elbow-p3">
+    <div class="ec"><div class="ec-h" onclick="te(this)"><div class="ec-l"><div><div class="ec-name">전완 회내·회외 저항 운동</div><div class="ec-meta">3세트 × 15회 · 기능 복귀</div></div></div><div style="display:flex;gap:6px;align-items:center;"><span class="tag tr">고급</span><span class="ec-arr">▾</span></div></div><div class="ec-b"><div class="ec-chips"><span class="ec-chip">망치 또는 가벼운 덤벨</span></div><div class="ec-point">팔꿈치를 90°로 고정하고 손에 가벼운 무게를 들어 전완을 회내·회외합니다. 실제 스포츠·일상 동작의 기능 회복 단계입니다.</div><div class="ec-ref">테니스엘보 기능 복귀 — 전완 회전 근력 회복이 스포츠 복귀 기준</div></div></div>
+  </div>
+</div>
+
+<!-- 평가 프로토콜 -->
+<div class="page" id="page-assessment">
+  <div class="ph"><div class="bc">평가 프로토콜</div><h2>임상 평가 프로토콜 — 부위별 핵심 테스트</h2><p>재활 전 반드시 평가를 선행합니다. Red Flag 확인 → 기능 평가 → 재활 적용 순서를 지킵니다.</p></div>
+  <div class="al al-r"><strong>원칙</strong>아래 테스트 중 Red Flag 해당 시 즉시 의뢰. 기능 평가 결과가 재활 운동 선택의 근거가 됩니다.</div>
+  <div class="st">어깨 평가</div>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>테스트</th><th>확인 목적</th><th>양성 기준</th><th>의미</th></tr>
+    <tr><td>Neer's Test</td><td>견봉하 충돌</td><td>팔을 앞으로 들어올릴 때 통증</td><td>SIS 의심</td></tr>
+    <tr><td>Hawkins-Kennedy</td><td>견봉하 충돌</td><td>90° 굴곡+내회전 시 통증</td><td>SIS 의심</td></tr>
+    <tr><td>Empty Can Test</td><td>극상근 파열</td><td>저항 시 통증·약화</td><td>극상근 건병변</td></tr>
+    <tr><td>Drop Arm Test</td><td>극상근 완전 파열</td><td>팔을 천천히 내리지 못함</td><td>완전 파열 의뢰</td></tr>
+    <tr><td>Apprehension Test</td><td>견관절 불안정</td><td>외회전 시 탈구 공포</td><td>불안정증 의뢰</td></tr>
+    <tr><td>Speed's Test</td><td>이두근 장두건염</td><td>전방 굴곡 저항 시 이두근 구 통증</td><td>이두근 건병변</td></tr>
+  </table></div>
+  <div class="st">무릎 평가</div>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>테스트</th><th>확인 목적</th><th>양성 기준</th><th>의미</th></tr>
+    <tr><td>McMurray Test</td><td>반월판 파열</td><td>회전 시 클릭음·통증</td><td>즉시 의뢰</td></tr>
+    <tr><td>Lachman Test</td><td>전방십자인대(ACL)</td><td>경골 전방 전위 과다</td><td>즉시 의뢰</td></tr>
+    <tr><td>Valgus/Varus Stress</td><td>MCL/LCL 손상</td><td>관절 벌어짐·통증</td><td>즉시 의뢰</td></tr>
+    <tr><td>Clarke's Test</td><td>슬개대퇴 연골</td><td>슬개골 압박 시 통증</td><td>PFPS·연골연화증</td></tr>
+    <tr><td>Single Leg Squat</td><td>둔근 약화·Valgus</td><td>무릎 안쪽 쏠림·골반 하강</td><td>기능 불량</td></tr>
+    <tr><td>Ober's Test</td><td>ITB 단축</td><td>다리 이완 시 테이블 미달</td><td>ITBS</td></tr>
+  </table></div>
+  <div class="st">척추 평가</div>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>테스트</th><th>확인 목적</th><th>양성 기준</th><th>의미</th></tr>
+    <tr><td>SLR (Straight Leg Raise)</td><td>요추 신경근 자극</td><td>30–70° 사이 방사통 재현</td><td>요추 디스크</td></tr>
+    <tr><td>Spurling's Test</td><td>경추 신경근 압박</td><td>두부 압박+측굴 시 팔 방사통</td><td>경추 신경근병증</td></tr>
+    <tr><td>Slump Test</td><td>요추 신경 긴장</td><td>자세 시 하지 방사통·저림</td><td>신경 긴장 증가</td></tr>
+    <tr><td>Phalen's Test</td><td>수근관 증후군</td><td>1분 내 손 저림·무감각</td><td>CTS</td></tr>
+    <tr><td>Tinel's Sign</td><td>신경 압박</td><td>압박 부위 두드릴 때 저림</td><td>CTS·TOS</td></tr>
+  </table></div>
+  <div class="st">단계 진행 판단 기준</div>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>단계</th><th>진행 조건</th><th>기간 목표</th></tr>
+    <tr><td>1단계 → 2단계</td><td>안정 시 VAS 3 이하 / 능동 ROM 정상의 70% 이상 / 부종 없음</td><td>1–3주</td></tr>
+    <tr><td>2단계 → 3단계</td><td>VAS 2 이하 / 근력 건측의 70% 이상 / 기능적 동작 통증 없음</td><td>3–8주</td></tr>
+    <tr><td>3단계 → 스포츠 복귀</td><td>VAS 0–1 / 근력 건측의 90% 이상 / Single Leg 테스트 통과</td><td>8–16주</td></tr>
+  </table></div>
+  <div class="st">부위별 금기 동작</div>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>진단</th><th>절대 금기</th><th>이유</th></tr>
+    <tr><td>허리 디스크 (신전 선호형)</td><td>깊은 굴곡, 무거운 데드리프트</td><td>수핵 후방 압박 증가</td></tr>
+    <tr><td>회전근개 파열 (수술 후 6주 이내)</td><td>능동 외전·외회전</td><td>봉합부 파열 위험</td></tr>
+    <tr><td>오십견 (1기)</td><td>무리한 관절가동술, 강제 스트레칭</td><td>염증 악화</td></tr>
+    <tr><td>PCL 손상</td><td>무릎 90° 이상 굴곡, 무거운 햄스트링 컬</td><td>경골 후방 전위 증가</td></tr>
+    <tr><td>FAI</td><td>딥 스쿼트, 굴곡+내회전 조합</td><td>충돌 각도 증가</td></tr>
+    <tr><td>척추 협착증</td><td>요추 신전 자세 지속, 뒤로 걷기</td><td>척추관 공간 감소</td></tr>
+    <tr><td>아킬레스건 완전 파열</td><td>편심성 부하 운동</td><td>건 파열 진행</td></tr>
+    <tr><td>테니스엘보 급성기</td><td>반복적 손목 신전 동작</td><td>건 부착부 자극 증가</td></tr>
+  </table></div>
+</div>
+
+
+<!-- 초기 체형 평가 -->
+<div class="page" id="page-initial-eval">
+  <div class="ph">
+    <div class="bc">평가 / 초기 스크리닝</div>
+    <h2>초기 체형 평가 — 신규 회원 프로토콜</h2>
+    <p>처음 오는 회원에게 실시하는 체형 스크리닝. 순서대로 진행하면 주요 체형 이상과 통증 원인을 파악할 수 있습니다. 전체 소요 시간 약 20–30분.</p>
+  </div>
+
+  <div class="al al-b"><strong>평가 순서</strong> 1단계 문진 → 2단계 정적 자세 평가 → 3단계 동적 움직임 평가 → 4단계 특이적 테스트 → 5단계 종합 정리</div>
+
+  <div class="st">1단계 — 문진 (Subjective Assessment)</div>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>항목</th><th>질문 내용</th><th>확인 포인트</th></tr>
+    <tr><td>주 호소</td><td>어디가 불편하세요? 언제부터요?</td><td>급성 vs 만성, 통증 부위 특정</td></tr>
+    <tr><td>통증 양상</td><td>어떨 때 아프고 어떨 때 괜찮으세요?</td><td>악화·완화 자세 → 방향 선호 파악</td></tr>
+    <tr><td>직업·생활</td><td>하루 얼마나 앉아 계세요? 주로 하시는 동작은?</td><td>과사용·자세 불량 원인 파악</td></tr>
+    <tr><td>운동 이력</td><td>평소 운동하세요? 어떤 종목?</td><td>근력 불균형 패턴 예측</td></tr>
+    <tr><td>수술·부상 이력</td><td>과거 수술이나 큰 부상이 있으셨나요?</td><td>구조적 제한 파악</td></tr>
+    <tr><td>Red Flag</td><td>야간통, 대소변 장애, 체중 감소, 발열 있으세요?</td><td>양성 시 즉시 의뢰</td></tr>
+  </table></div>
+
+  <div class="st">2단계 — 정적 자세 평가 (Static Postural Assessment)</div>
+  <div class="al al-o"><strong>준비</strong> 맨발, 편한 복장. 정면·측면·후면 3방향 관찰. 수직 플럼 라인 기준으로 평가합니다.</div>
+  <div class="acc">
+    <div class="acc-item">
+      <div class="acc-h" onclick="ta(this)"><div class="acc-l"><div class="acc-n">①</div><div><div class="acc-title">정면 관찰 체크리스트</div><div class="acc-sub">앞에서 바라보기</div></div></div><span class="acc-arr">▾</span></div>
+      <div class="acc-b"><div class="tbl-wrap" style="margin-top:12px;"><table class="tbl">
+        <tr><th>관찰 부위</th><th>정상</th><th>이상 소견</th><th>의미</th></tr>
+        <tr><td>머리 위치</td><td>중앙</td><td>한쪽으로 기울거나 회전</td><td>경추 측만, 사경</td></tr>
+        <tr><td>어깨 높이</td><td>좌우 동일</td><td>한쪽이 높거나 낮음</td><td>척추측만, 골반 측방경사</td></tr>
+        <tr><td>어깨 위치</td><td>귀 아래 수직</td><td>앞으로 말림</td><td>라운드숄더 → 어깨충돌 위험</td></tr>
+        <tr><td>골반 높이</td><td>좌우 동일</td><td>한쪽이 높음</td><td>골반 측방경사, 다리길이 차이</td></tr>
+        <tr><td>무릎 방향</td><td>정면</td><td>안쪽 X자 / 바깥쪽 O자</td><td>외반슬 / 내반슬</td></tr>
+        <tr><td>발 각도</td><td>약 8–10° 외회전</td><td>과도한 외회전 / 내회전</td><td>족부 정렬 이상</td></tr>
+        <tr><td>발 아치</td><td>정상 아치 유지</td><td>아치 소실 (편평족)</td><td>족부 회내 → 외반슬 연쇄</td></tr>
+      </table></div></div>
+    </div>
+    <div class="acc-item">
+      <div class="acc-h" onclick="ta(this)"><div class="acc-l"><div class="acc-n">②</div><div><div class="acc-title">측면 관찰 체크리스트</div><div class="acc-sub">옆에서 바라보기 — 가장 중요</div></div></div><span class="acc-arr">▾</span></div>
+      <div class="acc-b"><div class="tbl-wrap" style="margin-top:12px;"><table class="tbl">
+        <tr><th>관찰 부위</th><th>정상 (플럼 라인)</th><th>이상 소견</th><th>의미</th></tr>
+        <tr><td>귀 위치</td><td>어깨 위 수직</td><td>어깨보다 앞으로</td><td>두부전방자세(FHP) → 경추 디스크</td></tr>
+        <tr><td>흉추 만곡</td><td>완만한 후만</td><td>과도한 후만 (등 구부정)</td><td>흉추후만 → 어깨충돌증후군</td></tr>
+        <tr><td>요추 만곡 (과전만)</td><td>완만한 전만</td><td>배가 앞으로 나옴</td><td>골반 전방경사 → 요통</td></tr>
+        <tr><td>요추 만곡 (전만 소실)</td><td>완만한 전만</td><td>허리가 편평함</td><td>골반 후방경사 → 요통</td></tr>
+        <tr><td>골반 경사</td><td>ASIS·PSIS 수평</td><td>앞으로 기울어짐</td><td>골반 전방경사 (APT)</td></tr>
+        <tr><td>무릎 위치</td><td>약 5° 굴곡</td><td>과신전 (뒤로 꺾임)</td><td>백니 (Genu Recurvatum)</td></tr>
+      </table></div></div>
+    </div>
+    <div class="acc-item">
+      <div class="acc-h" onclick="ta(this)"><div class="acc-l"><div class="acc-n">③</div><div><div class="acc-title">후면 관찰 체크리스트</div><div class="acc-sub">뒤에서 바라보기</div></div></div><span class="acc-arr">▾</span></div>
+      <div class="acc-b"><div class="tbl-wrap" style="margin-top:12px;"><table class="tbl">
+        <tr><th>관찰 부위</th><th>정상</th><th>이상 소견</th><th>의미</th></tr>
+        <tr><td>척추 라인</td><td>수직 일직선</td><td>S자 또는 C자 휘어짐</td><td>척추측만증</td></tr>
+        <tr><td>견갑골 위치</td><td>척추에서 약 5cm 등거리</td><td>한쪽이 벌어지거나 날개처럼 뜸</td><td>날개견갑, 전거근 약화</td></tr>
+        <tr><td>견갑골 높이</td><td>좌우 동일</td><td>한쪽이 높음</td><td>척추측만, 사각근 긴장</td></tr>
+        <tr><td>허리 공간</td><td>좌우 대칭</td><td>한쪽이 좁음</td><td>척추측만, 골반 경사</td></tr>
+        <tr><td>종골 각도</td><td>수직</td><td>외측으로 기울어짐</td><td>족부 회내 (Pronation)</td></tr>
+      </table></div></div>
+    </div>
+  </div>
+
+  <div class="st">3단계 — 동적 움직임 평가 (Dynamic Assessment)</div>
+  <div class="acc">
+    <div class="acc-item">
+      <div class="acc-h" onclick="ta(this)"><div class="acc-l"><div class="acc-n">①</div><div><div class="acc-title">오버헤드 스쿼트 (OHSA)</div><div class="acc-sub">가장 중요한 전신 동적 평가 — 정면·측면·후면 3방향 관찰</div></div></div><span class="acc-arr">▾</span></div>
+      <div class="acc-b">
+        <div class="al al-g" style="margin-top:12px;"><strong>방법</strong> 발 어깨너비, 팔을 머리 위로 들고 천천히 스쿼트 5회 반복. 3방향에서 관찰합니다.</div>
+        <div class="tbl-wrap"><table class="tbl">
+          <tr><th>관찰 포인트</th><th>이상 소견</th><th>의미</th></tr>
+          <tr><td>팔이 앞으로 떨어짐</td><td>스쿼트 시 팔이 수직 유지 안 됨</td><td>흉추 가동성 저하, 라운드숄더</td></tr>
+          <tr><td>발뒤꿈치 들림</td><td>스쿼트 시 뒤꿈치가 뜸</td><td>발목 배측굴곡 제한, 종아리 단축</td></tr>
+          <tr><td>무릎 내측 쏠림</td><td>무릎이 안쪽으로 모임 (Valgus)</td><td>중둔근 약화, 외반슬, APT</td></tr>
+          <tr><td>몸통 과도한 전방 경사</td><td>상체가 너무 앞으로 기울어짐</td><td>고관절 굴곡근 단축, 발목 제한</td></tr>
+          <tr><td>요추 과전만</td><td>허리가 과도하게 꺾임</td><td>골반 전방경사, 코어 약화</td></tr>
+          <tr><td>골반 측방 이동</td><td>한쪽으로 골반이 쏠림</td><td>고관절 가동성 불균형</td></tr>
+        </table></div>
+      </div>
+    </div>
+    <div class="acc-item">
+      <div class="acc-h" onclick="ta(this)"><div class="acc-l"><div class="acc-n">②</div><div><div class="acc-title">싱글 레그 스쿼트 (SLS)</div><div class="acc-sub">둔근 약화 & 무릎 정렬 동시 평가</div></div></div><span class="acc-arr">▾</span></div>
+      <div class="acc-b">
+        <div class="al al-g" style="margin-top:12px;"><strong>방법</strong> 한 발로 서서 무릎을 30° 굽혔다 일어납니다. 좌우 각각 5회.</div>
+        <div class="tbl-wrap"><table class="tbl">
+          <tr><th>이상 소견</th><th>의미</th><th>연결 체형</th></tr>
+          <tr><td>무릎 안쪽 쏠림 (Valgus Collapse)</td><td>중둔근·대둔근 약화</td><td>외반슬, PFPS, APT</td></tr>
+          <tr><td>반대 골반 하강 (Trendelenburg sign)</td><td>지지측 중둔근 약화</td><td>골반 측방경사</td></tr>
+          <tr><td>몸통 측방 기울기</td><td>중둔근 약화 보상</td><td>골반 측방경사</td></tr>
+          <tr><td>발목 과도한 회내</td><td>족부 안정화 근육 약화</td><td>편평족, 무지외반</td></tr>
+        </table></div>
+      </div>
+    </div>
+    <div class="acc-item">
+      <div class="acc-h" onclick="ta(this)"><div class="acc-l"><div class="acc-n">③</div><div><div class="acc-title">보행 평가 (Gait Assessment)</div><div class="acc-sub">자연스러운 걸음걸이 관찰 — 10m 왕복</div></div></div><span class="acc-arr">▾</span></div>
+      <div class="acc-b"><div class="tbl-wrap" style="margin-top:12px;"><table class="tbl">
+        <tr><th>관찰 포인트</th><th>이상 소견</th><th>의미</th></tr>
+        <tr><td>발 각도</td><td>과도한 외회전 (오리걸음)</td><td>고관절 외회전 구축, 편평족</td></tr>
+        <tr><td>무릎 궤적</td><td>무릎이 안쪽으로 모임</td><td>중둔근 약화, 외반슬</td></tr>
+        <tr><td>골반 움직임</td><td>한쪽 골반이 처짐 (Trendelenburg)</td><td>지지측 중둔근 약화</td></tr>
+        <tr><td>팔 스윙</td><td>한쪽만 적거나 없음</td><td>흉추 가동성 저하, 어깨 문제</td></tr>
+        <tr><td>발뒤꿈치 착지</td><td>발 전체로 쿵쿵 착지</td><td>발목 배측굴곡 제한</td></tr>
+      </table></div></div>
+    </div>
+    <div class="acc-item">
+      <div class="acc-h" onclick="ta(this)"><div class="acc-l"><div class="acc-n">④</div><div><div class="acc-title">흉추·어깨 가동성 평가</div><div class="acc-sub">어깨·경추 문제의 근본 원인 확인</div></div></div><span class="acc-arr">▾</span></div>
+      <div class="acc-b"><div class="tbl-wrap" style="margin-top:12px;"><table class="tbl">
+        <tr><th>테스트</th><th>방법</th><th>정상</th><th>제한 시 의미</th></tr>
+        <tr><td>흉추 회전</td><td>앉아서 팔 교차 후 좌우 회전</td><td>좌우 45° 이상</td><td>흉추 가동성 저하 → 어깨충돌</td></tr>
+        <tr><td>어깨 굴곡</td><td>팔을 머리 위로 들기</td><td>180° 완전 거상</td><td>흉추후만 또는 충돌증후군</td></tr>
+        <tr><td>어깨 외회전</td><td>팔꿈치 90°, 외회전</td><td>90° 이상</td><td>후관절낭 단축, 오십견</td></tr>
+      </table></div></div>
+    </div>
+  </div>
+
+  <div class="st">4단계 — 의심 부위 특이적 테스트</div>
+  <div class="al al-b"><strong>안내</strong> 문진·정적·동적 평가에서 의심되는 부위에만 실시합니다. 전부 다 할 필요 없습니다.</div>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>의심 부위</th><th>핵심 테스트</th><th>양성 시 이동</th></tr>
+    <tr><td>어깨</td><td>Neer's + Hawkins-Kennedy + Empty Can</td><td>어깨 충돌증후군 / 회전근개 파열</td></tr>
+    <tr><td>경추·손 저림</td><td>Spurling + Phalen + Tinel + Roos</td><td>경추 디스크 / CTS / TOS</td></tr>
+    <tr><td>요추</td><td>SLR + McKenzie 방향 선호 테스트</td><td>허리 디스크 / 협착증</td></tr>
+    <tr><td>무릎</td><td>McMurray + Valgus/Varus Stress + Clarke's</td><td>해당 무릎 재활 페이지</td></tr>
+    <tr><td>발목</td><td>전방 서랍 검사 + Ottawa 규칙</td><td>발목 재활</td></tr>
+    <tr><td>고관절</td><td>FADIR + FAIR + Trendelenburg</td><td>고관절 재활 (FAI / 이상근)</td></tr>
+  </table></div>
+
+  <div class="st">5단계 — 종합 정리 & 재활 방향 설정</div>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>발견된 체형 이상</th><th>예상 연쇄 통증</th><th>재활 우선순위</th></tr>
+    <tr><td>FHP + 라운드숄더</td><td>경추통·두통·어깨충돌</td><td>흉추 가동성 → 심부경추굴근 → 견갑 안정화</td></tr>
+    <tr><td>골반 전방경사 (APT)</td><td>요통·외반슬·PFPS</td><td>장요근 이완 → 복횡근·대둔근 강화</td></tr>
+    <tr><td>외반슬 + 편평족</td><td>PFPS·ITBS·족저근막염</td><td>원인 감별(골반/대퇴/족부형) → 해당 강화</td></tr>
+    <tr><td>흉추후만 + 라운드숄더</td><td>극상근 충돌·회전근개 건염</td><td>흉추 가동화 → 소흉근 이완 → 하부승모근</td></tr>
+    <tr><td>척추측만</td><td>비대칭 요통·골반 경사</td><td>Schroth → 코어 → 중둔근 약화측 강화</td></tr>
+  </table></div>
+
+  <div class="al al-r" style="margin-top:16px;"><strong>Red Flag 발견 시 즉시 의뢰</strong> 야간통·체중감소·발열·대소변 장애·급격한 신경 증상 → 운동 보류 후 의뢰. 운동으로 해결할 수 있는 범위를 벗어난 문제입니다.</div>
+</div>
+</main>
+</div>
+
+<script>
+function go(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
+  const pg=document.getElementById('page-'+id);
+  if(pg)pg.classList.add('active');
+  document.querySelectorAll('.ni').forEach(n=>{
+    if(n.getAttribute('onclick')&&n.getAttribute('onclick').includes("'"+id+"'"))n.classList.add('active');
+  });
+  closeSB();window.scrollTo(0,0);
+}
+function ta(h){const b=h.nextElementSibling;h.classList.toggle('open');b.classList.toggle('open');}
+function te(h){h.closest('.ec').classList.toggle('open');}
+function pp(prefix,phase,btn){
+  const page=btn.closest('.page');
+  page.querySelectorAll('.ptab').forEach(t=>t.classList.remove('active'));
+  page.querySelectorAll('.pp').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(prefix+'-'+phase).classList.add('active');
+}
+function openSB(){document.getElementById('sb').classList.add('open');document.getElementById('ov').classList.add('show');}
+function closeSB(){document.getElementById('sb').classList.remove('open');document.getElementById('ov').classList.remove('show');}
+function sdb(db){
+  const ids={pubmed:'pm-q',pedro:'pe-q',jospt:'jo-q',cochrane:'co-q'};
+  const q=document.getElementById(ids[db]).value.trim();
+  if(!q)return;
+  const urls={
+    pubmed:`https://pubmed.ncbi.nlm.nih.gov/?term=${encodeURIComponent(q)}`,
+    pedro:`https://www.pedro.org.au/english/search/?search=${encodeURIComponent(q)}`,
+    jospt:`https://www.jospt.org/action/doSearch?query=${encodeURIComponent(q)}`,
+    cochrane:`https://www.cochranelibrary.com/search?searchBy=6&searchText=${encodeURIComponent(q)}`
+  };
+  window.open(urls[db],'_blank');
+}
+</script>
+<button class="print-btn" onclick="window.print()">인쇄 / PDF</button>
+</body>
+</html>
